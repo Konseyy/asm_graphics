@@ -89,10 +89,10 @@ line_loop:
   bl divide // r0 = y_current
   mov r1, r0 // r1 = y_current
   ldmfd sp!, {r0} // restore x_current
-  b end
 // draw pixel
   mov r2, r11 // current color
   bl pixel
+  b end
   add r10, r10, #1 // x0++
   b line_loop
 

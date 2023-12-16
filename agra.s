@@ -64,36 +64,35 @@ line:
   mov r11, r0 // r11 = framebuffer base address
   sub r0, r7, r5 // r0 = delta x
   sub r1, r8, r6 // r1 = delta y
-  // End point no longer needed as we have deltas
+// End point no longer needed as we have deltas
   mov r7, r0 // r7 = delta x
   mov r8, r1 // r8 = delta y
   cmp r7, r8 // if delta x >= delta y
   movgt r9, r7 // r9 = delta x
   movle r9, r8 // r9 = delta y
-  // r9 = step count
+// r9 = step count
   mov r10, #0 // r10 = current step
 
 line_loop:
   cmp r10, r9 // if current step >= step count
   bgt end
-  mul r3, r10, r7 // r3 = current step * delta x
-  mul r4, r10, r8 // r4 = current step * delta y
-  add r11, r5, r3 // r0 = x0 + current step * delta x
-  add r12, r6, r4 // r1 = y0 + current step * delta y
+  mul r11, r10, r7 // r11 = current step * delta x
+  mul r12, r10, r8 // r12 = current step * delta y
   mov r0, r11 // r0 = x0 + current step * delta x
   mov r1, r9 // r1 = step count
   bl divide // r0 = x_current
-  stmfd sp!, {r0} // save x_current
+  stmfd sp!, {r0}// save x_current
   mov r0, r12 // r0 = y0 + current step * delta y
   mov r1, r9 // r1 = step count
   bl divide // r0 = y_current
   mov r1, r0 // r1 = y_current
-  ldmfd sp!, {r0} // restore x_current
+  ldmfd sp!, {r0}// restore x_current
 // draw pixel
+  add r0, r0, r5 // x_increment += x0
+  add r1, r1, r6 // y_icrement += y0
   mov r2, r11 // current color
-  b end
   bl pixel
-  add r10, r10, #1 // x0++
+  add r10, r10, #1 // current step++
   b line_loop
 
 @ (x, y) returns x/y

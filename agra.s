@@ -104,11 +104,11 @@ divide:
   stmfd sp!, {r5-r12, lr}
   @ r0 = dividend, r1 = divisor
   @ Result will be placed in r0
-  stmfd sp!, {r5-r12, lr}
-  mov r1, r0
-  ldr r0, f__i
-  bl printf
-  ldmfd sp!, {r5-r12, lr}
+  @ stmfd sp!, {r5-r12, lr}
+  @ mov r1, r0
+  @ ldr r0, f__i
+  @ bl printf
+  @ ldmfd sp!, {r5-r12, lr}
   @ stmfd sp!, {r5-r12, lr}
   @ ldr r0, f__i
   @ bl printf

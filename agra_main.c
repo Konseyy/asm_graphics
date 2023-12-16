@@ -14,6 +14,7 @@ int main()
   {
     for (int j = 0; j < frameHeight; j++)
     {
+      printf("%d %d\n", i, j);
       pixel(j, i, &(pixcolor_t){1, 1, 1, 0});
     }
   }

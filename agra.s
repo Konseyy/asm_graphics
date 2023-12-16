@@ -93,12 +93,11 @@ line_loop:
   bl divide // r0 = y_current
   mov r1, r0 // r1 = y_current
   ldmfd sp!, {r0}// restore x_current
-  ldmfd sp!, {r2} // restore framebuffer base address
-  b end
 // draw pixel
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
   ldmfd sp!, {r2} // restore framebuffer base address
+  b end
   bl pixel
   add r10, r10, #1 // current step++
   b line_loop

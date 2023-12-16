@@ -73,6 +73,7 @@ line:
   movle r9, r8 // r9 = delta y
 // r9 = step count
   mov r10, #0 // r10 = current step
+  b end
 
 line_loop:
   cmp r10, r9 // if current step >= step count

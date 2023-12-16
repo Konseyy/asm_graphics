@@ -101,67 +101,64 @@ line_loop:
 
 @ (x, y) returns x/y
 divide:
-  stmfd sp!, {r0-r12, lr}
-  @ r0 = dividend, r1 = divisor
-  @ Result will be placed in r0
-  stmfd sp!, {r4-r12, lr}
-  mov r1, r0
-  ldr r0, f__i
-  bl printf
-  ldmfd sp!, {r4-r12, lr}
-  stmfd sp!, {r4-r12, lr}
-  ldr r0, f__i
-  bl printf
-  ldmfd sp!, {r4-r12, lr}
-  @ Check for divisor = 0 to avoid division by zero
-  cmp r1, #0
-  beq divison_end
+    stmfd sp!, {r4-r11, lr}    @ Save callee-saved registers and link register
 
-  @ Preserve the sign of the result
-  mrs r2, CPSR         @ Move the current program status register to r2
-  eor r3, r0, r1       @ XOR dividend and divisor to check if signs are different
-  bic r4, r2, #0x40000000     @ Clear the negative flag in r2
-  orrne r4, r4, #0x40000000   @ Set the negative flag if signs are different
+    @ Check for division by zero
+    cmp   r1, #0
+    beq   division_by_zero    @ Branch to error handling if divisor is zero
 
-  @ Make dividend and divisor positive
-  rsblt r0, r0, #0     @ If r0 is negative, negate it
-  rsblt r1, r1, #0     @ If r1 is negative, negate it
+    @ Preserve the signs of the dividend and divisor
+    mov   r4, r0              @ r4 = dividend
+    mov   r5, r1              @ r5 = divisor
+    mov   r6, #0              @ r6 = 0 (to calculate the sign of the result)
 
-  @ Initialize result and temporary counter
-  mov r5, #0           @ r5 is the result
-  mov r6, #1           @ r6 is a temporary counter
+    @ Check and make dividend positive
+    tst   r4, r4              @ Test if r4 is negative
+    rsbmi r4, r4, #0          @ Negate r4 if it's negative
+    eormi r6, r6, #1          @ Toggle r6 if dividend was negative
+
+    @ Check and make divisor positive
+    tst   r5, r5              @ Test if r5 is negative
+    rsbmi r5, r5, #0          @ Negate r5 if it's negative
+    eormi r6, r6, #1          @ Toggle r6 if divisor was negative
+
+    @ Perform division
+    bl    unsigned_divide     @ Branch to unsigned division routine
+
+    @ Apply sign to the result
+    tst   r6, #1              @ Test the sign bit in r6
+    rsbmi r0, r0, #0          @ Negate the result if sign bit is set
+
+    ldmfd sp!, {r4-r11, lr}   @ Restore registers and link register
+    bx    lr                  @ Return from function
+
+division_by_zero:
+    @ Handle division by zero here
+    @ For this example, let's return a special error code (e.g., 0xFFFFFFFF)
+    mov   r0, #0xFFFFFFFF
+    ldmfd sp!, {r4-r11, lr}
+    bx    lr
+
+unsigned_divide:
+    @ Inputs: r4 = dividend, r5 = divisor
+    @ Output: r0 = result
+    mov   r0, #0              @ Clear result register
+    mov   r7, #1              @ Set r7 to 1 (counter for division loop)
 
 division_loop:
-  cmp r1, r0, LSL#1        @ Compare divisor with (dividend shifted left by 1)
-  movls r1, r1, LSL#1      @ Shift divisor left by 1 if it's less or equal
-  movls r6, r6, LSL#1      @ Shift temporary counter left by 1 if divisor shifted
-  bls division_loop
+    cmp   r5, r4, LSL #1      @ Compare shifted divisor with dividend
+    movls r5, r5, LSL #1      @ Shift divisor left if it's less or equal
+    movls r7, r7, LSL #1      @ Shift counter left if divisor shifted
+    bls   division_loop
 
-division_calculation:
-  subs r0, r0, r1          @ Subtract divisor from dividend
-  addcs r5, r5, r6         @ Add counter to result if subtraction did not borrow
-  MOVS r6, r6, LSR#1       @ Shift counter right by 1
-  MOVS r1, r1, LSR#1       @ Shift divisor right by 1
-  bne division_calculation
+    @ Division calculation
+    subs  r4, r4, r5          @ Subtract divisor from dividend
+    addcs r0, r0, r7          @ Add counter to result if no borrow
+    movs  r7, r7, LSR #1      @ Shift counter right
+    movs  r5, r5, LSR #1      @ Shift divisor right
+    bne   unsigned_divide     @ Continue if not finished
 
-  @ Apply rounding
-  add r0, r5, #1           @ Add 1 for rounding
-  asrs r0, r0, #1          @ Shift right to divide by 2 (rounding)
-  orr r0, r0, r4           @ Apply the original sign to the result
-  
-  b divison_end
-
-divison_end:
-  stmfd sp!, {r0-r12, lr}
-  mov r1, r0
-  ldr r0, f__i
-  bl printf
-  ldr r0, f__i
-  mov r1, #-111
-  bl printf
-  ldmfd sp!, {r0-r12, lr}
-  ldmfd sp!, {r0-r12, lr}
-  bx lr
+    bx    lr                  @ Return from unsigned_divide subroutine
 
 end:
   ldmfd sp!, {r4-r12, lr}

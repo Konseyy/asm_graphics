@@ -7,11 +7,6 @@
 .global line
 .type line, %function
 
-f__i:     .word formati
-.data
-formati:  .asciz "from assembly: %d\n"
-
-
 @ pixel(x, y, *color)
 pixel:
   stmfd sp!, {r5-r12, lr}
@@ -123,3 +118,7 @@ division_loop:
 end:
   ldmfd sp!, {r5-r12, lr}
   bx lr // return
+
+f__i:     .word formati
+.data
+formati:  .asciz "from assembly: %d\n"

@@ -81,6 +81,9 @@ line:
   mov r10, #0 // r10 = current step
 
 line_loop:
+  ldr r0, f__i
+  mov r1, r5 // r1 = x0
+  bl printf
   cmp r10, r9 // if current step >= step count
   bgt line_end
   mul r11, r10, r7 // r11 = current step * delta x

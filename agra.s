@@ -7,8 +7,10 @@
 .global line
 .type line, %function
 
+f__i:     .word formati
 .data
-formatstr:  .asciz "N: %d\n" @ Format string for printf
+formati:  .asciz "from assembly: %d\n"
+
 
 @ pixel(x, y, *color)
 pixel:
@@ -75,10 +77,10 @@ line:
   mov r8, r0 // r8 = delta x
   mov r12, r1 // r12 = delta y
 // slope = r8 / r12
-  ldr r0, =formatStr @ Load address of format string into r0
+  ldr r0, f__i @ Load address of format string into r0
   ldr r1, r8 // Load delta x into r1
   bl printf // Print delta x
-  ldr r0, =formatStr @ Load address of format string into r0
+  ldr r0, f__i @ Load address of format string into r0
   ldr r1, r12 // Load delta y into r1
   bl printf // Print delta y
 

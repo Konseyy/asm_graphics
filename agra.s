@@ -106,7 +106,7 @@ divide:
   ldr r0, f__i
   bl printf
   ldmfd sp!, {r5-r12, lr}
-  stdmfd sp!, {r5-r12, lr}
+  stmfd sp!, {r5-r12, lr}
   ldr r0, f__i
   bl printf
   ldmfd sp!, {r5-r12, lr}

@@ -75,7 +75,7 @@ line:
 
 line_loop:
   cmp r10, r9 // if current step >= step count
-  bgt end
+  b end
   mul r3, r10, r7 // r3 = current step * delta x
   mul r4, r10, r8 // r4 = current step * delta y
   add r11, r5, r3 // r0 = x0 + current step * delta x

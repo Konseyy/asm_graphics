@@ -75,11 +75,13 @@ line:
   mov r10, #0 // r10 = current step
 
 line_loop:
+
   stmfd sp!, {r0-r12, lr} // save variables
   ldr r0, f__i
   mov r1, r10
   bl printf
   ldmfd sp!, {r0-r12, lr} // restore variables
+
   cmp r10, r9 // if current step >= step count
   bgt end
   stmfd sp!, {r2}
@@ -88,6 +90,15 @@ line_loop:
   mov r0, r11 // r0 = x0 + current step * delta x
   mov r1, r9 // r1 = step count
   bl divide // r0 = x_current
+  
+
+  stmfd sp!, {r0-r12, lr} // save variables
+  ldr r0, f__i
+  mov r1, #-1
+  bl printf
+  ldmfd sp!, {r0-r12, lr} // restore variables
+
+  
   stmfd sp!, {r0}// save x_current
   mov r0, r12 // r0 = y0 + current step * delta y
   mov r1, r9 // r1 = step count

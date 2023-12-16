@@ -91,8 +91,8 @@ line:
   mov r10, #0 // r10 = current step
 
 line_loop:
-  cmp r10, r9 // if current step >= step count
-  bge end
+  cmp r10, r9 // if current step > step count
+  bgt end
   stmfd sp!, {r2}
   mul r0, r10, r7 // r0 = current step * delta x
   mov r1, r9 // r1 = step count

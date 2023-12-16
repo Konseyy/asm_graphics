@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define frameWidth 8
-#define frameHeight 5
+#define frameWidth 40
+#define frameHeight 20
 
 // Frame buffer that contains all pixels
 // First element is used as currently set color

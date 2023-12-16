@@ -133,10 +133,10 @@ DIV_LOOP:
 END_DIV:
     @ Adjust quotient sign if necessary
     CMP R4, #1
-    BEQ END_DIV         @ If sign flag is positive, we are done
+    BEQ RETURN_DIV         @ If sign flag is positive, we are done
     NEG R2, R2      @ Otherwise, negate the quotient
 
-END_DIV:
+RETURN_DIV:
   mov r0, r2 // return quotient
   bx lr
     @ At this point, R2 = quotient, R3 = remainder

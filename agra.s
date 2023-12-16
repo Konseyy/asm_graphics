@@ -66,15 +66,6 @@ line:
   mov r10, r0 // r10 = height
   bl FrameBufferGetAddress // r0 = framebuffer base address
   mov r11, r0 // r11 = framebuffer base address
-  @ mov r0, r5
-  @ mov r1, r6
-  @ mov r2, r11
-  @ bl pixel // draw first pixel
-  @ mov r0, r7
-  @ mov r1, r8
-  @ mov r2, r11
-  @ bl pixel // draw second pixel
-  @ b end
   sub r0, r7, r5 // r0 = delta x
   sub r1, r8, r6 // r1 = delta y
   // y1 coordinate no longer needed as we have the slope
@@ -90,10 +81,10 @@ line_loop:
   mov r2, r11
   bl pixel // draw pixel
   add r5, r5, #1 // x0++
-  mul r0, r6, r8 // y0 * delta x
-  add r0, r0, r12
+  mul r0, r6, r8 // r0 = y0 * delta x
+  add r0, r0, r12 // r0 = y0 * delta x + delta y
   mov r1, r8
-  bl divide // (y0 * d_x + d_y) / delta x
+  bl divide // r0 = (y0 * d_x + d_y) / delta x
   mov r6, r0 // y0 = (y0 * d_x + d_y) / delta x
   b line_loop
 

@@ -55,7 +55,7 @@ int FrameShow()
 {
   for (int i = 0; i < frameHeight; i++)
   {
-    for (int j = 0; j < frameWidth; j++)
+    for (int j = frameWidth - 1; j >= 0; j--)
     {
       pixcolor_t pixel = frameBuffer[i * frameWidth + j + 1];
       char color = ' ';

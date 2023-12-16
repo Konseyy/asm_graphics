@@ -101,94 +101,47 @@ line_loop:
 
 @ (x, y) returns x/y
 divide:
-    stmfd sp!, {r4-r11, lr}  @ Save callee-saved registers and link register
+  mov r2, #0  // Initialize quotient
+  cmp r1, #0  // Check if divisor is 0
+  beq div_end     // If divisor is 0, end the program to avoid division by zero
+  cmp r0, #0  // Check if dividend is 0
+  beq div_end     // If dividend is 0, end the program as the quotient is 0
 
-     @ Store original r0 and r1 values
-    mov   r4, r0            @ Store original r0 (dividend) in r4
-    mov   r5, r1            @ Store original r1 (divisor) in r5
+  // Make dividend positive and remember if it was negative
+  mov r3, #0  // Initialize flag for negative dividend
+  cmp r0, #0  // Compare dividend with 0
+  bge check_divisor  // If dividend is positive, check divisor
+  rsb r0, r0, #0  // Make dividend positive
+  mov r3, #1  // Set flag for negative dividend
 
-    @ Print the dividend (original r0)
-    ldr   r0, f__i         @ Load address of format string into r0
-    mov   r1, r4            @ Move the dividend into r1 (argument for printf)
-    bl    printf            @ Call printf to print the dividend
+check_divisor:
+  // Make divisor positive and remember if it was negative
+  mov r4, #0  // Initialize flag for negative divisor
+  cmp r1, #0  // Compare divisor with 0
+  bge start_division  // If divisor is positive, start division
+  rsb r1, r1, #0  // Make divisor positive
+  mov r4, #1  // Set flag for negative divisor
 
-    @ Print the divisor (original r1)
-    ldr   r0, f__i         @ Load address of format string into r0
-    mov   r1, r5            @ Move the divisor into r1 (argument for printf)
-    bl    printf            @ Call printf to print the divisor
+start_division:
+  // Start division
+  loop:
+    cmp r0, r1  // Compare dividend with divisor
+    blt end_loop  // If dividend is less than divisor, end loop
+    sub r0, r0, r1  // Subtract divisor from dividend
+    add r2, r2, #1  // Increment quotient
+    b loop  // Repeat loop
 
-    @ Restore original r0 and r1 values for division
-    mov   r0, r4            @ Restore the original value of r0 (dividend)
-    mov   r1, r5            @ Restore the original value of r1 (divisor)
+end_loop:
+  // If both dividend and divisor were negative or both were positive, quotient is positive
+  // If one of them was negative, quotient is negative
+  eor r3, r3, r4  // XOR flags for negative dividend and divisor
+  cmp r3, #0  // Compare result with 0
+  beq end  // If result is 0, end the program as the quotient is positive
+  rsb r2, r2, #0  // Make quotient negative
 
-
-    @ Check for division by zero
-    cmp   r1, #0
-    beq   division_by_zero
-
-    @ Preserve the signs of the dividend and divisor
-    mov   r4, r0            @ r4 = dividend
-    mov   r5, r1            @ r5 = divisor
-    mov   r6, #0            @ r6 = 0 (to calculate the sign of the result)
-
-    @ Make dividend and divisor positive
-    tst   r4, r4
-    rsbmi r4, r4, #0
-    eormi r6, r6, #1
-
-    tst   r5, r5
-    rsbmi r5, r5, #0
-    eormi r6, r6, #1
-
-    @ Perform division
-    bl    unsigned_divide
-
-    @ Apply sign to the result
-    tst   r6, #1
-    rsbmi r0, r0, #0
-
-    @ Print the result
-    mov   r1, r0            @ Move the result into r1 (argument for printf)
-    ldr   r0, f__i         @ Load address of format string into r0
-    bl    printf            @ Call printf to print the result
-
-    ldmfd sp!, {r4-r11, lr} @ Restore registers and link register
-    bx    lr                @ Return from function
-
-division_by_zero:
-    @ Handle division by zero
-    mov   r0, #0xFFFFFFFF   @ Error code for division by zero
-    b     print_and_return
-
-unsigned_divide:
-    @ Inputs: r4 = dividend, r5 = divisor
-    @ Output: r0 = result
-    mov   r0, #0              @ Clear result register
-    mov   r7, #1              @ Set r7 to 1 (counter for division loop)
-
-division_loop:
-    cmp   r5, r4, LSL #1      @ Compare shifted divisor with dividend
-    movls r5, r5, LSL #1      @ Shift divisor left if it's less or equal
-    movls r7, r7, LSL #1      @ Shift counter left if divisor shifted
-    bls   division_loop
-
-    @ Division calculation
-    subs  r4, r4, r5          @ Subtract divisor from dividend
-    addcs r0, r0, r7          @ Add counter to result if no borrow
-    movs  r7, r7, LSR #1      @ Shift counter right
-    movs  r5, r5, LSR #1      @ Shift divisor right
-    bne   unsigned_divide     @ Continue if not finished
-
-    bx    lr                  @ Return from unsigned_divide subroutine
-
-print_and_return:
-    @ Print the result/error code before returning
-    mov   r1, r0            @ Move the result/error code into r1
-    ldr   r0, f__i         @ Load address of format string into r0
-    bl    printf            @ Call printf to print the result/error code
-
-    ldmfd sp!, {r4-r11, lr} @ Restore registers and link register
-    bx    lr                @ Return from function
+div_end:
+  mov r0, r2  // Move quotient to r0
+  bx lr  // Return
 
 end:
   ldmfd sp!, {r4-r12, lr}

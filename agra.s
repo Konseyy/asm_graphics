@@ -83,11 +83,11 @@ line_loop:
   mov r0, r11 // r0 = x0 + current step * delta x
   mov r1, r9 // r1 = step count
   bl divide // r0 = x_current
+  b end
   stmfd sp!, {r0} // save x_current
   mov r0, r12 // r0 = y0 + current step * delta y
   mov r1, r9 // r1 = step count
-  b end
-  b divide // r0 = y_current
+  bl divide // r0 = y_current
   mov r1, r0 // r1 = y_current
   ldmfd sp!, {r0} // restore x_current
 // draw pixel

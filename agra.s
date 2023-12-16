@@ -45,7 +45,7 @@ pixel:
   b end
 
 @ setPixColor(*color)
-setPixColor:
+setpixcolor:
   stmfd sp!, {r5-r12, lr}
   mov r5, r0 // r5 = color pointer
   bl FrameBufferGetAddress // r0 = framebuffer base address
@@ -75,25 +75,9 @@ line:
   mov r10, #0 // r10 = current step
 
 line_loop:
-
-  stmfd sp!, {r0-r12, lr} // save variables
-  ldr r0, f__i
-  mov r1, r10
-  bl printf
-  ldmfd sp!, {r0-r12, lr} // restore variables
-
   cmp r10, r9 // if current step >= step count
   bgt end
   stmfd sp!, {r2}
-  
-
-  stmfd sp!, {r0-r12, lr} // save variables
-  ldr r0, f__i
-  mov r1, #-1
-  bl printf
-  ldmfd sp!, {r0-r12, lr} // restore variables
-
-  
   mul r11, r10, r7 // r11 = current step * delta x
   mul r12, r10, r8 // r12 = current step * delta y
   mov r0, r11 // r0 = x0 + current step * delta x
@@ -115,24 +99,44 @@ line_loop:
 
 @ (x, y) returns x/y
 divide:
-  mov r2, #0 @ r3 will hold the result
-  mov r4, r1           @ Copy divisor to r4
-  asr r4, r4, #1       @ r4 = r1 / 2 (half of divisor for rounding)
+  @ r0 = dividend, r1 = divisor
+  @ Result will be placed in r0
 
-  add r0, r0, r4 @ Add half of divisor to dividend for rounding
+  @ Check for divisor = 0 to avoid division by zero
+  cmp r1, #0
+
+  @ Preserve the sign of the result
+  mrs r2, CPSR         @ Move the current program status register to r2
+  eor r3, r0, r1       @ XOR dividend and divisor to check if signs are different
+  bic r4, r2, #0x40000000     @ Clear the negative flag in r2
+  orrne r4, r4, #0x40000000   @ Set the negative flag if signs are different
+
+  @ Make dividend and divisor positive
+  rsblt r0, r0, #0     @ If r0 is negative, negate it
+  rsblt r1, r1, #0     @ If r1 is negative, negate it
+
+  @ Initialize result and temporary counter
+  mov r5, #0           @ r5 is the result
+  mov r6, #1           @ r6 is a temporary counter
 
 division_loop:
-@ Compare dividend with divisor
-  cmp r0, r1
-@ Subtract divisor from dividend if dividend >= divisor
-  subcs r0, r0, r1
-@ Increment result if subtraction was performed
-  addcs r2, r2, #1
-@ Repeat if dividend was greater or equal to divisor
-  bcs division_loop
-@ Move result to r0
-  mov r0, r2
-  bx lr // return
+  cmp r1, r0, LSL#1        @ Compare divisor with (dividend shifted left by 1)
+  movls r1, r1, LSL#1      @ Shift divisor left by 1 if it's less or equal
+  movls r6, r6, LSL#1      @ Shift temporary counter left by 1 if divisor shifted
+  bls division_loop
+
+division_calculation:
+  subs r0, r0, r1          @ Subtract divisor from dividend
+  addcs r5, r5, r6         @ Add counter to result if subtraction did not borrow
+  MOVS r6, r6, LSR#1       @ Shift counter right by 1
+  MOVS r1, r1, LSR#1       @ Shift divisor right by 1
+  bne division_calculation
+
+  @ Apply rounding
+  add r0, r5, #1           @ Add 1 for rounding
+  asrs r0, r0, #1          @ Shift right to divide by 2 (rounding)
+  orr r0, r0, r4           @ Apply the original sign to the result
+  bx lr
 
 end:
   ldmfd sp!, {r5-r12, lr}

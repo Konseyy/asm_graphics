@@ -64,8 +64,7 @@ line:
   mov r7, r2 // r7 = x1
   mov r8, r3 // r8 = y1
   bl FrameBufferGetAddress // r0 = framebuffer base address
-  mov r2, r0
-  stmfd sp!, {r2} // save framebuffer base address
+  stmfd sp!, {r0} // save framebuffer base address
   mov r11, r0 // r11 = framebuffer base address
   sub r0, r7, r5 // r0 = delta x
   sub r1, r8, r6 // r1 = delta y
@@ -101,6 +100,7 @@ line_loop:
   mov r1, r0 // r1 = y_current
   ldmfd sp!, {r0}// restore x_current
 // draw pixel
+b end
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
   ldmfd sp, {r2} // restore framebuffer base address

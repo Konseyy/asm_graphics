@@ -85,11 +85,6 @@ line_loop:
   cmp r10, r9 // if current step >= step count
   bgt end
   stmfd sp!, {r2}
-  mul r11, r10, r7 // r11 = current step * delta x
-  mul r12, r10, r8 // r12 = current step * delta y
-  mov r0, r11 // r0 = x0 + current step * delta x
-  mov r1, r9 // r1 = step count
-  bl divide // r0 = x_current
   
 
   stmfd sp!, {r0-r12, lr} // save variables
@@ -99,6 +94,11 @@ line_loop:
   ldmfd sp!, {r0-r12, lr} // restore variables
 
   
+  mul r11, r10, r7 // r11 = current step * delta x
+  mul r12, r10, r8 // r12 = current step * delta y
+  mov r0, r11 // r0 = x0 + current step * delta x
+  mov r1, r9 // r1 = step count
+  bl divide // r0 = x_current
   stmfd sp!, {r0}// save x_current
   mov r0, r12 // r0 = y0 + current step * delta y
   mov r1, r9 // r1 = step count

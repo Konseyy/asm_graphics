@@ -105,6 +105,14 @@ line_loop:
 @ (x, y) returns x/y
 divide:
   stmfd sp!, {r4-r12, lr}
+  stmfd sp!, {r0-r3} // save arguments
+  mov r1, r0 // r1 = x
+  ldr r0, f__i // r0 = formati
+  bl printf // print x
+  ldmfd sp, {r0-r3} // restore arguments
+  ldr r0, f__i // r0 = formati
+  bl printf // print y
+  ldmfd sp!, {r0-r3} // restore arguments
   mov r4, #1 // -1 if result negative, otherwise 1
   cmp r0, #0
   rsblt r0, r0, #0 // r0 = -x

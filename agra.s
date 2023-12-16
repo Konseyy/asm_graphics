@@ -86,6 +86,7 @@ line_loop:
   stmfd sp!, {r2}
   mul r0, r10, r7 // r0 = current step * delta x
   mov r1, r9 // r1 = step count
+  ldmfd sp!, {r2} // restore framebuffer base address
   b end
   bl divide // r0 = x_current
   stmfd sp!, {r0}// save x_current

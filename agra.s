@@ -73,7 +73,6 @@ line:
   movle r9, r8 // r9 = delta y
 // r9 = step count
   mov r10, #0 // r10 = current step
-  b end
 
 line_loop:
   cmp r10, r9 // if current step >= step count
@@ -94,6 +93,7 @@ line_loop:
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
   ldmfd sp!, {r2} // restore framebuffer base address
+  b end
   bl pixel
   add r10, r10, #1 // current step++
   b line_loop

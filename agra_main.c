@@ -14,13 +14,13 @@ int main()
     }
   }
 
-  pixel(0, 0, &(pixcolor_t){1, 0, 0, 0});
-  pixel(1, 0, &(pixcolor_t){0, 1, 0, 0});
-  pixel(0, 1, &(pixcolor_t){0, 0, 1, 0});
+  // pixel(0, 0, &(pixcolor_t){1, 0, 0, 0});
+  // pixel(1, 0, &(pixcolor_t){0, 1, 0, 0});
+  // pixel(0, 1, &(pixcolor_t){0, 0, 1, 0});
 
   setPixColor(&(pixcolor_t){1, 0, 1, 0});
 
-  line(19,3,0,6);
+  line(19, 3, 0, 6);
 
   FrameShow();
   return 0;

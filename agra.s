@@ -36,10 +36,10 @@ pixel:
 // Calculate the pixel address in r5
 // Add the offset to the base address to get the pixel address
   add r5, r0, r5
-  b end
 
 // Load the 32-bit color value from the color pointer
   ldr r10, [r7]
+  b end
 
 // Store the color value at the pixel address of the framebuffer
   str r10, [r5]

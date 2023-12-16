@@ -103,44 +103,30 @@ line_loop:
 
 @ (x, y) returns x/y
 divide:
-    @ R0 = dividend, R1 = divisor, R2 = quotient, R3 = remainder
-    @ R4 = temporary register for sign handling
+  stmfd sp!, {r4-r12, lr}
+  mov r4, #1 // -1 if result negative, otherwise 1
+  cmp r0, #0
+  rsblt r0, r0, #0 // r0 = -x
+  rsblt r4, r4, #0 // r4 *= -1
+  cmp r1, #0
+  rsblt r1, r1, #0 // r1 = -y
+  rsblt r4, r4, #0 // r4 *= -1
+  mov r2, #0 // r2 = result
 
-    MOV R2, #0      @ Clear quotient
-    MOV R3, R0      @ Set remainder to dividend
-    MOV R4, #1      @ Set the sign flag to positive
+  beq divide_end // if y == 0, return 0
 
-    @ Check and make dividend positive, record if it was negative
-    CMP R0, #0
-    BGE DIV_POSITIVE
-    NEG R3, R3      @ Make remainder positive
-    EOR R4, R4, #1  @ Flip sign flag
+divide_loop:
+  cmp r0, r1 // if x >= y
+  blt divide_end
+  sub r0, r0, r1 // x -= y
+  add r2, r2, #1 // result++
+  b divide_loop
 
-DIV_POSITIVE:
-    @ Check and make divisor positive, record if it was negative
-    CMP R1, #0
-    BGE DIV_LOOP
-    NEG R1, R1      @ Make divisor positive
-    EOR R4, R4, #1  @ Flip sign flag
-
-DIV_LOOP:
-    CMP R3, R1      @ Compare remainder with divisor
-    BLT END_DIV     @ If remainder < divisor, division is done
-    SUB R3, R3, R1  @ Subtract divisor from remainder
-    ADD R2, R2, #1  @ Increment quotient
-    B DIV_LOOP
-
-END_DIV:
-    @ Adjust quotient sign if necessary
-    CMP R4, #1
-    BEQ RETURN_DIV         @ If sign flag is positive, we are done
-    NEG R2, R2      @ Otherwise, negate the quotient
-
-RETURN_DIV:
-  mov r0, r2 // return quotient
-  bx lr
-    @ At this point, R2 = quotient, R3 = remainder
-
+divide_end:
+  mov r0, r2
+  ldmfd sp!, {r4-r12, lr}
+  bx lr // return
+   
 end:
   ldmfd sp!, {r4-r12, lr}
   bx lr // return

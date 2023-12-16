@@ -48,7 +48,7 @@ pixel:
   add r5, r0, r5
 
 // Load the 32-bit color value from the color pointer
-  ldr r10, [r7]
+  @ ldr r10, [r7]
 
 // Store the color value at the pixel address of the framebuffer
   str r10, [r5]

@@ -45,7 +45,7 @@ pixel:
   b end
 
 @ setPixColor(*color)
-setPixColor:
+setpixcolor:
   stmfd sp!, {r5-r12, lr}
   mov r5, r0 // r5 = color pointer
   bl FrameBufferGetAddress // r0 = framebuffer base address
@@ -62,7 +62,6 @@ line:
   mov r8, r3 // r8 = y1
   bl FrameBufferGetAddress // r0 = framebuffer base address
   mov r2, r0
-  stmfd sp!, {r2} // save framebuffer base address
   mov r11, r0 // r11 = framebuffer base address
   sub r0, r7, r5 // r0 = delta x
   sub r1, r8, r6 // r1 = delta y
@@ -74,7 +73,6 @@ line:
   movle r9, r8 // r9 = delta y
 // r9 = step count
   mov r10, #0 // r10 = current step
-  b end
 
 line_loop:
   cmp r10, r9 // if current step >= step count

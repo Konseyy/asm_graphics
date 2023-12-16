@@ -91,8 +91,8 @@ line_loop:
   ldmfd sp!, {r0} // restore x_current
 // draw pixel
   mov r2, r11 // current color
-  bl pixel
   b end
+  bl pixel
   add r10, r10, #1 // x0++
   b line_loop
 

@@ -12,14 +12,14 @@
 @ pixel(x, y, *color)
 pixel:
   stmfd sp!, {r4-r12, lr}
-  stmfd sp!, {r0, r1} // save x_increment, y_increment
-  mov r1, r0
-  ldr r0, f__x // r0 = formati
-  bl printf // print x_increment
-  ldmfd sp, {r0, r1} // restore x_increment, y_increment
-  ldr r0, f__y // r0 = formati
-  bl printf // print y_increment
-  ldmfd sp!, {r0, r1} // restore x_increment, y_increment
+  @ stmfd sp!, {r0, r1} // save x_increment, y_increment
+  @ mov r1, r0
+  @ ldr r0, f__x // r0 = formati
+  @ bl printf // print x_increment
+  @ ldmfd sp, {r0, r1} // restore x_increment, y_increment
+  @ ldr r0, f__y // r0 = formati
+  @ bl printf // print y_increment
+  @ ldmfd sp!, {r0, r1} // restore x_increment, y_increment
   mov r5, r0 // r5 = x
   mov r6, r1 // r6 = y
   mov r7, r2 // r7 = color pointer

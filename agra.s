@@ -38,7 +38,6 @@ pixel:
   add r5, r0, r5
 
 // Load the 32-bit color value from the color pointer
-  b end
   ldr r10, [r7]
 
 // Store the color value at the pixel address of the framebuffer
@@ -62,6 +61,8 @@ line:
   mov r7, r2 // r7 = x1
   mov r8, r3 // r8 = y1
   bl FrameBufferGetAddress // r0 = framebuffer base address
+  mov r2, r0
+  stmfd sp!, {r2} // save framebuffer base address
   mov r11, r0 // r11 = framebuffer base address
   sub r0, r7, r5 // r0 = delta x
   sub r1, r8, r6 // r1 = delta y
@@ -76,6 +77,7 @@ line:
 
 line_loop:
   cmp r10, r9 // if current step >= step count
+  ldmfdgt sp!, {r2} // restore framebuffer base address
   bgt end
   mul r11, r10, r7 // r11 = current step * delta x
   mul r12, r10, r8 // r12 = current step * delta y
@@ -91,7 +93,7 @@ line_loop:
 // draw pixel
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
-  mov r2, r11 // current color
+  ldmfd sp, {r2} // restore framebuffer base address
   bl pixel
   add r10, r10, #1 // current step++
   b line_loop

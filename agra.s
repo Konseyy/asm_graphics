@@ -82,7 +82,6 @@ line_loop:
   add r12, r6, r4 // r1 = y0 + current step * delta y
   mov r0, r11 // r0 = x0 + current step * delta x
   mov r1, r9 // r1 = step count
-  b end
   bl divide // r0 = x_current
   stmfd sp!, {r0} // save x_current
   mov r0, r12 // r0 = y0 + current step * delta y
@@ -90,6 +89,7 @@ line_loop:
   b divide // r0 = y_current
   mov r1, r0 // r1 = y_current
   ldmfd sp!, {r0} // restore x_current
+  b end
 // draw pixel
   mov r2, r11 // current color
   bl pixel

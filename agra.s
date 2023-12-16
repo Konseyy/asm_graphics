@@ -90,12 +90,11 @@ line_loop:
   stmfd sp!, {r0}// save x_current
   mul r0, r10, r8 // r12 = current step * delta y
   mov r1, r9 // r1 = step count
-  ldmfd sp!, {r0}// restore x_current
-  ldmfd sp!, {r2} // restore framebuffer base address
-  b end
   bl divide // r0 = y_current
   mov r1, r0 // r1 = y_current
   ldmfd sp!, {r0}// restore x_current
+  ldmfd sp!, {r2} // restore framebuffer base address
+  b end
 // draw pixel
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0

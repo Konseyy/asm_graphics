@@ -66,14 +66,14 @@ line:
   mov r10, r0 // r10 = height
   bl FrameBufferGetAddress // r0 = framebuffer base address
   mov r11, r0 // r11 = framebuffer base address
-  @ mov r0, r5
-  @ mov r1, r6
-  @ mov r2, r11
-  @ bl pixel // draw first pixel
-  @ mov r0, r7
-  @ mov r1, r8
-  @ mov r2, r11
-  @ bl pixel // draw second pixel
+  mov r0, r5
+  mov r1, r6
+  mov r2, r11
+  bl pixel // draw first pixel
+  mov r0, r7
+  mov r1, r8
+  mov r2, r11
+  bl pixel // draw second pixel
   @ b end
   sub r0, r7, r5 // r0 = delta x
   sub r1, r8, r6 // r1 = delta y

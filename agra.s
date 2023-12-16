@@ -7,6 +7,9 @@
 .global line
 .type line, %function
 
+.data
+formatstr:  .asciz "N: %d\n" @ Format string for printf
+
 @ pixel(x, y, *color)
 pixel:
   stmfd sp!, {r5-r12, lr}
@@ -45,7 +48,7 @@ pixel:
   b end
 
 @ setPixColor(*color)
-setPixColor:
+setpixcolor:
   stmfd sp!, {r5-r12, lr}
   mov r5, r0 // r5 = color pointer
   bl FrameBufferGetAddress // r0 = framebuffer base address
@@ -68,10 +71,16 @@ line:
   mov r11, r0 // r11 = framebuffer base address
   sub r0, r7, r5 // r0 = delta x
   sub r1, r8, r6 // r1 = delta y
-  // y1 coordinate no longer needed as we have the slope
+// y1 coordinate no longer needed as we have the slope
   mov r8, r0 // r8 = delta x
   mov r12, r1 // r12 = delta y
-  // slope = r8 / r12
+// slope = r8 / r12
+  ldr r0, =formatStr @ Load address of format string into r0
+  ldr r1, r8 // Load delta x into r1
+  bl printf // Print delta x
+  ldr r0, =formatStr @ Load address of format string into r0
+  ldr r1, r12 // Load delta y into r1
+  bl printf // Print delta y
 
 line_loop:
   cmp r5, r7 // if x0 >= x1

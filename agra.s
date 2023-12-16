@@ -115,7 +115,7 @@ divide:
   ldmfd sp!, {r4-r12, lr}
   @ Check for divisor = 0 to avoid division by zero
   cmp r1, #0
-  beq end
+  beq divison_end
 
   @ Preserve the sign of the result
   mrs r2, CPSR         @ Move the current program status register to r2
@@ -148,6 +148,10 @@ division_calculation:
   add r0, r5, #1           @ Add 1 for rounding
   asrs r0, r0, #1          @ Shift right to divide by 2 (rounding)
   orr r0, r0, r4           @ Apply the original sign to the result
+  
+  b divison_end
+
+divison_end:
   stmfd sp!, {r4-r12, lr}
   mov r1, r0
   ldr r0, f__i
@@ -156,7 +160,7 @@ division_calculation:
   mov r1, #-111
   bl printf
   ldmfd sp!, {r4-r12, lr}
-  b end
+  bx lr
 
 end:
   ldmfd sp!, {r4-r12, lr}

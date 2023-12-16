@@ -103,47 +103,8 @@ line_loop:
 
 @ (x, y) returns x/y
 divide:
-  mov r2, #0  // Initialize quotient
-  cmp r1, #0  // Check if divisor is 0
-  beq div_end     // If divisor is 0, end the program to avoid division by zero
-  cmp r0, #0  // Check if dividend is 0
-  beq div_end     // If dividend is 0, end the program as the quotient is 0
-
-  // Make dividend positive and remember if it was negative
-  mov r3, #0  // Initialize flag for negative dividend
-  cmp r0, #0  // Compare dividend with 0
-  bge check_divisor  // If dividend is positive, check divisor
-  rsb r0, r0, #0  // Make dividend positive
-  mov r3, #1  // Set flag for negative dividend
-
-check_divisor:
-  // Make divisor positive and remember if it was negative
-  mov r4, #0  // Initialize flag for negative divisor
-  cmp r1, #0  // Compare divisor with 0
-  bge start_division  // If divisor is positive, start division
-  rsb r1, r1, #0  // Make divisor positive
-  mov r4, #1  // Set flag for negative divisor
-
-start_division:
-  // Start division
-  loop:
-    cmp r0, r1  // Compare dividend with divisor
-    blt end_loop  // If dividend is less than divisor, end loop
-    sub r0, r0, r1  // Subtract divisor from dividend
-    add r2, r2, #1  // Increment quotient
-    b loop  // Repeat loop
-
-end_loop:
-  // If both dividend and divisor were negative or both were positive, quotient is positive
-  // If one of them was negative, quotient is negative
-  eor r3, r3, r4  // XOR flags for negative dividend and divisor
-  cmp r3, #0  // Compare result with 0
-  beq div_end  // If result is 0, end the program as the quotient is positive
-  rsb r2, r2, #0  // Make quotient negative
-
-div_end:
-  mov r0, r2  // Move quotient to r0
-  bx lr  // Return
+  sdiv r0, r0, r1
+  bx lr
 
 end:
   ldmfd sp!, {r4-r12, lr}

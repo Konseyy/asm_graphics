@@ -20,7 +20,6 @@ pixel:
   ldr r0, f__y // r0 = formati
   bl printf // print y_increment
   ldmfd sp!, {r0, r1} // restore x_increment, y_increment
-  ldmfd sp!, {r2} // restore framebuffer base address
   mov r5, r0 // r5 = x
   mov r6, r1 // r6 = y
   mov r7, r2 // r7 = color pointer
@@ -107,6 +106,7 @@ line_loop:
 // draw pixel
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
+  ldmfd sp!, {r2} // restore framebuffer base address
   bl pixel
   @ b end
   add r10, r10, #1 // current step++

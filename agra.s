@@ -161,7 +161,11 @@ division_by_zero:
     b     print_and_return
 
 unsigned_divide:
-    @ [Division logic as before]
+   @ Inputs: r4 = dividend, r5 = divisor
+    @ Output: r0 = result
+    mov   r0, #0              @ Clear result register
+    mov   r7, #1              @ Set r7 to 1 (counter for division loop)
+
 
 print_and_return:
     @ Print the result/error code before returning

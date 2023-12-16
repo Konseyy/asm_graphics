@@ -61,32 +61,24 @@ line:
   mov r7, r2 // r7 = x1
   mov r8, r3 // r8 = y1
   bl FrameBufferGetAddress // r0 = framebuffer base address
-  stmfd sp!, {r0} // save framebuffer base address
+  mov r2, r0
+  stmfd sp!, {r2} // save framebuffer base address
   mov r11, r0 // r11 = framebuffer base address
   sub r0, r7, r5 // r0 = delta x
   sub r1, r8, r6 // r1 = delta y
 // End point no longer needed as we have deltas
   mov r7, r0 // r7 = delta x
   mov r8, r1 // r8 = delta y
-  mov r2, #-1
-  cmp r7, #0 // if delta x < 0
-  mullt r0, r7, r2 // delta x *= -1
-  cmp r8, #0 // if delta y < 0
-  mullt r1, r8, r2 // delta y *= -1
-  cmp r0, r1 // if delta x >= delta y
-  movgt r9, r0 // r9 = delta x
-  movle r9, r1 // r9 = delta y
+  cmp r7, r8 // if delta x >= delta y
+  movgt r9, r7 // r9 = delta x
+  movle r9, r8 // r9 = delta y
 // r9 = step count
   mov r10, #0 // r10 = current step
 
 line_loop:
-  @ stmfd sp!, {r0-r12, lr}
-  @ ldr r0, f__i
-  @ mov r1, r5 // r1 = x0
-  @ bl printf
-  @ ldmfd sp!, {r0-r12, lr}
   cmp r10, r9 // if current step >= step count
-  bgt line_end
+  ldmfdgt sp!, {r2} // restore framebuffer base address
+  bgt end
   mul r11, r10, r7 // r11 = current step * delta x
   mul r12, r10, r8 // r12 = current step * delta y
   mov r0, r11 // r0 = x0 + current step * delta x
@@ -99,19 +91,12 @@ line_loop:
   mov r1, r0 // r1 = y_current
   ldmfd sp!, {r0}// restore x_current
 // draw pixel
-b end
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
-  ldmfd sp!, {r2} // restore framebuffer base address
-  stmfd sp!, {r2}
+  ldmfd sp, {r2} // restore framebuffer base address
   bl pixel
   add r10, r10, #1 // current step++
   b line_loop
-
-line_end:
-  ldmfd sp!, {r2} // restore framebuffer base address
-  ldmfd sp!, {r5-r12, lr}
-  bx lr // return
 
 @ (x, y) returns x/y
 divide:

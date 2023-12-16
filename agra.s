@@ -112,9 +112,6 @@ divide:
   stmfd sp!, {r4-r12, lr}
   ldr r0, f__i
   bl printf
-  ldr r0, f__i
-  mov r1, #-111
-  bl printf
   ldmfd sp!, {r4-r12, lr}
   @ Check for divisor = 0 to avoid division by zero
   cmp r1, #0
@@ -151,6 +148,14 @@ division_calculation:
   add r0, r5, #1           @ Add 1 for rounding
   asrs r0, r0, #1          @ Shift right to divide by 2 (rounding)
   orr r0, r0, r4           @ Apply the original sign to the result
+  stmfd sp!, {r4-r12, lr}
+  mov r1, r0
+  ldr r0, f__i
+  bl printf
+  ldr r0, f__i
+  mov r1, #-111
+  bl printf
+  ldmfd sp!, {r4-r12, lr}
   b end
 
 end:

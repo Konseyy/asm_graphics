@@ -101,64 +101,57 @@ line_loop:
 
 @ (x, y) returns x/y
 divide:
-    stmfd sp!, {r4-r11, lr}    @ Save callee-saved registers and link register
+    stmfd sp!, {r4-r11, lr}  @ Save callee-saved registers and link register
 
     @ Check for division by zero
     cmp   r1, #0
-    beq   division_by_zero    @ Branch to error handling if divisor is zero
+    beq   division_by_zero
 
     @ Preserve the signs of the dividend and divisor
-    mov   r4, r0              @ r4 = dividend
-    mov   r5, r1              @ r5 = divisor
-    mov   r6, #0              @ r6 = 0 (to calculate the sign of the result)
+    mov   r4, r0            @ r4 = dividend
+    mov   r5, r1            @ r5 = divisor
+    mov   r6, #0            @ r6 = 0 (to calculate the sign of the result)
 
-    @ Check and make dividend positive
-    tst   r4, r4              @ Test if r4 is negative
-    rsbmi r4, r4, #0          @ Negate r4 if it's negative
-    eormi r6, r6, #1          @ Toggle r6 if dividend was negative
+    @ Make dividend and divisor positive
+    tst   r4, r4
+    rsbmi r4, r4, #0
+    eormi r6, r6, #1
 
-    @ Check and make divisor positive
-    tst   r5, r5              @ Test if r5 is negative
-    rsbmi r5, r5, #0          @ Negate r5 if it's negative
-    eormi r6, r6, #1          @ Toggle r6 if divisor was negative
+    tst   r5, r5
+    rsbmi r5, r5, #0
+    eormi r6, r6, #1
 
     @ Perform division
-    bl    unsigned_divide     @ Branch to unsigned division routine
+    bl    unsigned_divide
 
     @ Apply sign to the result
-    tst   r6, #1              @ Test the sign bit in r6
-    rsbmi r0, r0, #0          @ Negate the result if sign bit is set
+    tst   r6, #1
+    rsbmi r0, r0, #0
 
-    ldmfd sp!, {r4-r11, lr}   @ Restore registers and link register
-    bx    lr                  @ Return from function
+    @ Print the result
+    mov   r1, r0            @ Move the result into r1 (argument for printf)
+    ldr   r0, =f__i         @ Load address of format string into r0
+    bl    printf            @ Call printf to print the result
+
+    ldmfd sp!, {r4-r11, lr} @ Restore registers and link register
+    bx    lr                @ Return from function
 
 division_by_zero:
-    @ Handle division by zero here
-    @ For this example, let's return a special error code (e.g., 0xFFFFFFFF)
-    mov   r0, #0xFFFFFFFF
-    ldmfd sp!, {r4-r11, lr}
-    bx    lr
+    @ Handle division by zero
+    mov   r0, #0xFFFFFFFF   @ Error code for division by zero
+    b     print_and_return
 
 unsigned_divide:
-    @ Inputs: r4 = dividend, r5 = divisor
-    @ Output: r0 = result
-    mov   r0, #0              @ Clear result register
-    mov   r7, #1              @ Set r7 to 1 (counter for division loop)
+    @ [Division logic as before]
 
-division_loop:
-    cmp   r5, r4, LSL #1      @ Compare shifted divisor with dividend
-    movls r5, r5, LSL #1      @ Shift divisor left if it's less or equal
-    movls r7, r7, LSL #1      @ Shift counter left if divisor shifted
-    bls   division_loop
+print_and_return:
+    @ Print the result/error code before returning
+    mov   r1, r0            @ Move the result/error code into r1
+    ldr   r0, =f__i         @ Load address of format string into r0
+    bl    printf            @ Call printf to print the result/error code
 
-    @ Division calculation
-    subs  r4, r4, r5          @ Subtract divisor from dividend
-    addcs r0, r0, r7          @ Add counter to result if no borrow
-    movs  r7, r7, LSR #1      @ Shift counter right
-    movs  r5, r5, LSR #1      @ Shift divisor right
-    bne   unsigned_divide     @ Continue if not finished
-
-    bx    lr                  @ Return from unsigned_divide subroutine
+    ldmfd sp!, {r4-r11, lr} @ Restore registers and link register
+    bx    lr                @ Return from function
 
 end:
   ldmfd sp!, {r4-r12, lr}

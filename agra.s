@@ -31,12 +31,12 @@ pixel:
   mul r3, r2, r0 // y *= 4 (4 bytes per pixel)
   add r5, r1, r3 // x += y (offset from the beginning of the framebuffer)
   add r5, r5, #4 // x += 4 (skip the first 4 bytes of the framebuffer)
-  b end
 
   bl FrameBufferGetAddress // r0 = framebuffer base address
 // Calculate the pixel address in r5
 // Add the offset to the base address to get the pixel address
   add r5, r0, r5
+  b end
 
 // Load the 32-bit color value from the color pointer
   ldr r10, [r7]

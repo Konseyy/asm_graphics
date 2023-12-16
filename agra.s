@@ -2,6 +2,10 @@
 .align 2
 .global pixel
 .type pixel, %function
+.global setPixColor
+.type setPixColor, %function
+.global line
+.type line, %function
 
 @ pixel(x, y, *color)
 pixel:
@@ -38,6 +42,63 @@ pixel:
 
 // Store the color value at the pixel address of the framebuffer
   str r10, [r5]
+  b end
+
+@ setPixColor(*color)
+setpixcolor:
+  stmfd sp!, {r5-r12, lr}
+  mov r5, r0 // r5 = color pointer
+  bl FrameBufferGetAddress // r0 = framebuffer base address
+  ldr r3, [r5] // r3 = color
+  str r3, [r0] // store color at the framebuffer address
+  b end
+
+@ line(x0, y0, x1, y1)
+line:
+  stmfd sp!, {r5-r12, lr}
+  mov r5, r0 // r5 = x0
+  mov r6, r1 // r6 = y0
+  mov r7, r2 // r7 = x1
+  mov r8, r3 // r8 = y1
+  bl FrameBufferGetWidth
+  mov r9, r0 // r9 = width
+  bl FrameBufferGetHeight
+  mov r10, r0 // r10 = height
+  bl FrameBufferGetAddress // r0 = framebuffer base address
+  mov r11, r0 // r11 = framebuffer base address
+  ldr r12, [r11] // r12 = current color
+  mov r0, r5
+  mov r1, r6
+  mov r2, r11
+  bl pixel // draw first pixel
+  mov r0, r7
+  mov r1, r8
+  mov r2, r11
+  bl pixel // draw second pixel
+  b end
+
+
+@ (x, y) returns x/y
+divide:
+  mov r2, #0 @ r3 will hold the result
+  mov r4, r1           @ Copy divisor to r4
+  asr r4, r4, #1       @ r4 = r1 / 2 (half of divisor for rounding)
+
+  add r0, r0, r4 @ Add half of divisor to dividend for rounding
+
+division_loop:
+@ Compare dividend with divisor
+  cmp r0, r1
+@ Subtract divisor from dividend if dividend >= divisor
+  subcs r0, r0, r1
+@ Increment result if subtraction was performed
+  addcs r2, r2, #1
+@ Repeat if dividend was greater or equal to divisor
+  bcs division_loop
+@ Move result to r0
+  mov r0, r2
+  bx lr // return
+
 end:
   ldmfd sp!, {r5-r12, lr}
   bx lr // return

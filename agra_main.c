@@ -18,6 +18,8 @@ int main()
   pixel(1, 0, &(pixcolor_t){0, 1, 0, 0});
   pixel(0, 1, &(pixcolor_t){0, 0, 1, 0});
 
+  line(2,3,10,28);
+
   FrameShow();
   return 0;
 }

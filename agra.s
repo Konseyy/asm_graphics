@@ -137,7 +137,7 @@ divide_end:
   mul r0, r2, r4 // r0 = result * sign
   stmfd sp!, {r0, lr} // save result
   mov r1, r0 // r1 = result
-  ldr r0, f__i // r0 = formati
+  ldr r0, f__r // r0 = formati
   bl printf // print result
   ldmfd sp!, {r0, lr} // restore arguments
   ldmfd sp!, {r4-r12, lr}

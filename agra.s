@@ -120,7 +120,7 @@ divide:
   ldmfd sp!, {r0-r12, lr}
   @ Check for divisor = 0 to avoid division by zero
   cmp r1, #0
-  beq end
+  beq divide_by_zero
 
   @ Preserve the sign of the result
   mrs r2, CPSR         @ Move the current program status register to r2

@@ -24,7 +24,8 @@ pixel:
   mov r0, #4
   mul r1, r5, r0 // x *= 4 (4 bytes per pixel)
   mul r2, r6, r8 // y *= width
-  add r5, r1, r2 // x += y (offset from the beginning of the framebuffer)
+  mul r3, r2, r0 // y *= 4 (4 bytes per pixel)
+  add r5, r1, r3 // x += y (offset from the beginning of the framebuffer)
   add r5, r5, #4 // x += 4 (skip the first 4 bytes of the framebuffer)
 
   bl FrameBufferGetAddress // r0 = framebuffer base address

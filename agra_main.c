@@ -20,10 +20,7 @@ int main()
   // pixel(0, 1, &(pixcolor_t){0, 0, 1, 0});
 
   setPixColor(&(pixcolor_t){1, 0, 1, 0});
-
-  printf("5/2 = %d, 5/3 = %d\n", divide(5, 2), divide(5, 3));
-  printf("5/-2 = %d, -5/3 = %d, -5/-5=%d\n", divide(5, -2), divide(-5, 3), divide(-5, -5));
-
+  
   line(19, 3, 0, 6);
 
   FrameShow();

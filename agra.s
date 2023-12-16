@@ -10,6 +10,7 @@
 @ pixel(x, y, *color)
 pixel:
   stmfd sp!, {r5-r12, lr}
+  b end
   mov r5, r0 // r5 = x
   mov r6, r1 // r6 = y
   mov r7, r2 // r7 = color pointer
@@ -90,12 +91,6 @@ line_loop:
 // draw pixel
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
-  stmfd sp!, {r0-r12, lr}
-  mov r1, r1
-  ldr r0, f__i
-  @ add r1, r0, r5
-  bl printf
-  ldmfd sp!, {r0-r12, lr}
   mov r2, r11 // current color
   bl pixel
   add r10, r10, #1 // current step++

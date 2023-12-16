@@ -45,7 +45,7 @@ pixel:
   b end
 
 @ setPixColor(*color)
-setPixColor:
+setpixcolor:
   stmfd sp!, {r5-r12, lr}
   mov r5, r0 // r5 = color pointer
   bl FrameBufferGetAddress // r0 = framebuffer base address
@@ -71,31 +71,34 @@ line:
 // y1 coordinate no longer needed as we have the slope
   mov r8, r0 // r8 = delta x
   mov r12, r1 // r12 = delta y
-// slope = r8 / r12
-  stmfd sp!, {r5-r12, lr}
-  ldr r0, f__i @ Load address of format string into r0
-  mov r1, r8 // Load delta x into r1
-  bl printf // Print delta x
-  ldmfd sp!, {r5-r12, lr}
-  ldr r0, f__i @ Load address of format string into r0
-  mov r1, r12 // Load delta y into r1
-  stmfd sp!, {r5-r12, lr}
-  bl printf // Print delta y
-  ldmfd sp!, {r5-r12, lr}
+// b = y0 - m * x0
+  mul r0, r12, r5 // r0 = delta y * x0
+  mul r1, r8, r6 // r1 = delta x * y0
+  sub r3, r1, r0 // r3 = delta x * y0 - delta y * x0
+  mov r0, r3 // r0 = r3
+  mov r1, r8 // r1 = delta x
+  bl divide  // r0 = b / delta x
+  mov r6, r0 // r6 = y0 = b
+// slope = b = r8 / r12
+// y-intercept = b = r6
 
 line_loop:
   cmp r5, r7 // if x0 >= x1
   bgt end
-  mov r0, r5
-  mov r1, r6
-  mov r2, r11
-  bl pixel // draw pixel
+@ Calculate y = m * x + b
+  mul r0, r12, r5 // r0 = delta y * x_current
+  mul r1, r6, r8 // r1 = y_intercept * delta x
+  add r2, r0, r1 // r2 = delta y * x_current + y_intercept * delta x
+  mov r0, r2 // r0 = r2
+  mov r1, r8 // r1 = delta x
+  bl divide  // r0 = y_current
+  mov r6, r0 // r6 = y_current
+// draw pixel
+  mov r0, r5 // x_current
+  mov r1, r6 // y_current
+  mov r2, r11 // current color
+  bl pixel
   add r5, r5, #1 // x0++
-  mul r0, r6, r8 // r0 = y0 * delta x
-  add r0, r0, r12 // r0 = y0 * delta x + delta y
-  mov r1, r8
-  bl divide // r0 = (y0 * d_x + d_y) / delta x
-  mov r6, r0 // y0 = (y0 * d_x + d_y) / delta x
   b line_loop
 
 @ (x, y) returns x/y

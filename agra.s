@@ -10,11 +10,11 @@
 @ pixel(x, y, *color)
 pixel:
   stmfd sp!, {r5-r12, lr}
-  b end
   mov r5, r0 // r5 = x
   mov r6, r1 // r6 = y
   mov r7, r2 // r7 = color pointer
   bl FrameBufferGetWidth
+  b end
   mov r8, r0 // r8 = width
   bl FrameBufferGetHeight
   mov r9, r0 // r9 = height

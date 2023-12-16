@@ -160,6 +160,7 @@ divison_end:
   mov r1, #-111
   bl printf
   ldmfd sp!, {r0-r12, lr}
+  ldmfd sp!, {r4-r12, lr}
   bx lr
 
 end:

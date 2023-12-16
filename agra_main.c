@@ -1,15 +1,15 @@
 #include "agra.h"
 
-void pixel(int x, int y, pixcolor_t *color)
-{
-  pixcolor_t *frameBuffer = FrameBufferGetAddress();
-  int frameWidth = FrameBufferGetWidth();
-  int frameHeight = FrameBufferGetHeight();
-  if (x >= 0 && x < frameWidth && y >= 0 && y < frameHeight)
-  {
-    frameBuffer[y * frameWidth + x] = *color;
-  }
-}
+// void pixel(int x, int y, pixcolor_t *color)
+// {
+//   pixcolor_t *frameBuffer = FrameBufferGetAddress();
+//   int frameWidth = FrameBufferGetWidth();
+//   int frameHeight = FrameBufferGetHeight();
+//   if (x >= 0 && x < frameWidth && y >= 0 && y < frameHeight)
+//   {
+//     frameBuffer[y * frameWidth + x] = *color;
+//   }
+// }
 
 int main()
 {

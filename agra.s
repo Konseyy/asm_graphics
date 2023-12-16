@@ -9,7 +9,7 @@
 
 @ pixel(x, y, *color)
 pixel:
-  stmfd sp!, {r5-r12, lr}
+  stmfd sp!, {r4-r12, lr}
   mov r5, r0 // r5 = x
   mov r6, r1 // r6 = y
   mov r7, r2 // r7 = color pointer
@@ -46,7 +46,7 @@ pixel:
 
 @ setPixColor(*color)
 setPixColor:
-  stmfd sp!, {r5-r12, lr}
+  stmfd sp!, {r4-r12, lr}
   mov r5, r0 // r5 = color pointer
   bl FrameBufferGetAddress // r0 = framebuffer base address
   ldr r3, [r5] // r3 = color
@@ -55,7 +55,7 @@ setPixColor:
 
 @ line(x0, y0, x1, y1)
 line:
-  stmfd sp!, {r5-r12, lr}
+  stmfd sp!, {r4-r12, lr}
   mov r5, r0 // r5 = x0
   mov r6, r1 // r6 = y0
   mov r7, r2 // r7 = x1
@@ -101,21 +101,21 @@ line_loop:
 
 @ (x, y) returns x/y
 divide:
-  stmfd sp!, {r5-r12, lr}
+  stmfd sp!, {r4-r12, lr}
   @ r0 = dividend, r1 = divisor
   @ Result will be placed in r0
-  @ stmfd sp!, {r5-r12, lr}
-  @ mov r1, r0
-  @ ldr r0, f__i
-  @ bl printf
-  @ ldmfd sp!, {r5-r12, lr}
-  @ stmfd sp!, {r5-r12, lr}
+  stmfd sp!, {r4-r12, lr}
+  mov r1, r0
+  ldr r0, f__i
+  bl printf
+  ldmfd sp!, {r4-r12, lr}
+  @ stmfd sp!, {r4-r12, lr}
   @ ldr r0, f__i
   @ bl printf
   @ ldr r0, f__i
   @ mov r1, #-111
   @ bl printf
-  @ ldmfd sp!, {r5-r12, lr}
+  @ ldmfd sp!, {r4-r12, lr}
   @ Check for divisor = 0 to avoid division by zero
   cmp r1, #0
   beq end
@@ -154,7 +154,7 @@ division_calculation:
   b end
 
 end:
-  ldmfd sp!, {r5-r12, lr}
+  ldmfd sp!, {r4-r12, lr}
   bx lr // return
 
 f__i:     .word formati

@@ -83,11 +83,11 @@ line:
 line_loop:
   cmp r10, r9 // if current step >= step count
   bge end
+  b end
   stmfd sp!, {r2}
   mul r0, r10, r7 // r0 = current step * delta x
   mov r1, r9 // r1 = step count
   bl divide // r0 = x_current
-  b end
   stmfd sp!, {r0}// save x_current
   mul r0, r10, r8 // r12 = current step * delta y
   mov r1, r9 // r1 = step count

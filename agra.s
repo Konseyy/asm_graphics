@@ -77,8 +77,8 @@ line:
 
 line_loop:
   cmp r10, r9 // if current step >= step count
-  ldmfdgt sp!, {r2} // restore framebuffer base address
   bgt end
+  stmfd sp!, {r2}
   mul r11, r10, r7 // r11 = current step * delta x
   mul r12, r10, r8 // r12 = current step * delta y
   mov r0, r11 // r0 = x0 + current step * delta x
@@ -93,7 +93,7 @@ line_loop:
 // draw pixel
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
-  ldmfd sp, {r2} // restore framebuffer base address
+  ldmfd sp!, {r2} // restore framebuffer base address
   bl pixel
   add r10, r10, #1 // current step++
   b line_loop

@@ -110,6 +110,9 @@ divide:
   stmfd sp!, {r5-r12, lr}
   ldr r0, f__i
   bl printf
+  ldr r0, f__i
+  mov r1, #-111
+  bl printf
   ldmfd sp!, {r5-r12, lr}
   @ Check for divisor = 0 to avoid division by zero
   cmp r1, #0

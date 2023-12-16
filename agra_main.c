@@ -1,4 +1,5 @@
 #include "agra.h"
+#include <stdio.h>
 
 int main()
 {

@@ -14,12 +14,17 @@ int main()
     for (int j = 0; j < frameHeight; j++)
     {
       pixel(j, i, &(pixcolor_t){1, 1, 1, 0});
-      FrameShow();
     }
   }
 
   pixel(0, 0, &(pixcolor_t){1, 0, 0, 0});
   pixel(1, 0, &(pixcolor_t){0, 1, 0, 0});
+  pixel(2, 0, &(pixcolor_t){0, 1, 0, 0});
+  pixel(3, 0, &(pixcolor_t){0, 1, 0, 0});
+  pixel(4, 0, &(pixcolor_t){0, 1, 0, 0});
+  pixel(5, 0, &(pixcolor_t){0, 1, 0, 0});
+  pixel(6, 0, &(pixcolor_t){0, 1, 0, 0});
+  pixel(7, 0, &(pixcolor_t){0, 1, 0, 0});
   pixel(0, 1, &(pixcolor_t){0, 0, 1, 0});
   pixel(0, 2, &(pixcolor_t){0, 0, 1, 0});
   pixel(0, 3, &(pixcolor_t){0, 0, 1, 0});

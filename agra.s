@@ -108,12 +108,12 @@ divide:
     mov   r5, r1            @ Store original r1 (divisor) in r5
 
     @ Print the dividend (original r0)
-    ldr   r0, f__i         @ Load address of format string into r0
+    ldr   r0, f__x         @ Load address of format string into r0
     mov   r1, r4            @ Move the dividend into r1 (argument for printf)
     bl    printf            @ Call printf to print the dividend
 
     @ Print the divisor (original r1)
-    ldr   r0, f__i         @ Load address of format string into r0
+    ldr   r0, f__y         @ Load address of format string into r0
     mov   r1, r5            @ Move the divisor into r1 (argument for printf)
     bl    printf            @ Call printf to print the divisor
 
@@ -149,7 +149,7 @@ divide:
 
     @ Print the result
     mov   r1, r0            @ Move the result into r1 (argument for printf)
-    ldr   r0, f__i         @ Load address of format string into r0
+    ldr   r0, f__res         @ Load address of format string into r0
     bl    printf            @ Call printf to print the result
 
     ldmfd sp!, {r4-r11, lr} @ Restore registers and link register
@@ -166,7 +166,7 @@ unsigned_divide:
 print_and_return:
     @ Print the result/error code before returning
     mov   r1, r0            @ Move the result/error code into r1
-    ldr   r0, f__i         @ Load address of format string into r0
+    ldr   r0, f__res         @ Load address of format string into r0
     bl    printf            @ Call printf to print the result/error code
 
     ldmfd sp!, {r4-r11, lr} @ Restore registers and link register
@@ -176,6 +176,10 @@ end:
   ldmfd sp!, {r4-r12, lr}
   bx lr // return
 
-f__i:     .word formati
+f__x:     .word formatx
+f__y:     .word formaty
+f__res:   .word formatres
 .data
-formati:  .asciz "from assembly: %d\n"
+formatx:  .asciz "X: %d\n"
+formaty:  .asciz "Y: %d\n"
+formatres:  .asciz "Result: %d\n"

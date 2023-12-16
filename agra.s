@@ -104,18 +104,18 @@ divide:
   stmfd sp!, {r4-r12, lr}
   @ r0 = dividend, r1 = divisor
   @ Result will be placed in r0
-  @ stmfd sp!, {r4-r12, lr}
-  @ mov r1, r0
-  @ ldr r0, f__i
-  @ bl printf
-  @ ldmfd sp!, {r4-r12, lr}
-  @ stmfd sp!, {r4-r12, lr}
-  @ ldr r0, f__i
-  @ bl printf
-  @ ldr r0, f__i
-  @ mov r1, #-111
-  @ bl printf
-  @ ldmfd sp!, {r4-r12, lr}
+  stmfd sp!, {r4-r12, lr}
+  mov r1, r0
+  ldr r0, f__i
+  bl printf
+  ldmfd sp!, {r4-r12, lr}
+  stmfd sp!, {r4-r12, lr}
+  ldr r0, f__i
+  bl printf
+  ldr r0, f__i
+  mov r1, #-111
+  bl printf
+  ldmfd sp!, {r4-r12, lr}
   @ Check for divisor = 0 to avoid division by zero
   cmp r1, #0
   beq end

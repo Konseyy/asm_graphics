@@ -45,7 +45,7 @@ pixel:
   b end
 
 @ setPixColor(*color)
-setpixcolor:
+setPixColor:
   stmfd sp!, {r5-r12, lr}
   mov r5, r0 // r5 = color pointer
   bl FrameBufferGetAddress // r0 = framebuffer base address

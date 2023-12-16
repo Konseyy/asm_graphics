@@ -45,7 +45,7 @@ pixel:
   b end
 
 @ setPixColor(*color)
-setPixColor:
+setpixcolor:
   stmfd sp!, {r5-r12, lr}
   mov r5, r0 // r5 = color pointer
   bl FrameBufferGetAddress // r0 = framebuffer base address
@@ -72,12 +72,16 @@ line:
   mov r8, r0 // r8 = delta x
   mov r12, r1 // r12 = delta y
 // slope = r8 / r12
-  @ ldr r0, f__i @ Load address of format string into r0
-  @ mov r1, r8 // Load delta x into r1
-  @ bl printf // Print delta x
+  stmfd sp!, {r5-r12, lr}
+  ldr r0, f__i @ Load address of format string into r0
+  mov r1, r8 // Load delta x into r1
+  bl printf // Print delta x
+  ldmfd sp!, {r5-r12, lr}
   ldr r0, f__i @ Load address of format string into r0
   mov r1, r12 // Load delta y into r1
+  stmfd sp!, {r5-r12, lr}
   bl printf // Print delta y
+  ldmfd sp!, {r5-r12, lr}
 
 line_loop:
   cmp r5, r7 // if x0 >= x1

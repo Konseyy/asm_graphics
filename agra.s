@@ -14,9 +14,9 @@ pixel:
   mov r6, r1 // r6 = y
   mov r7, r2 // r7 = color pointer
   bl FrameBufferGetWidth
-  b end
   mov r8, r0 // r8 = width
   bl FrameBufferGetHeight
+  b end
   mov r9, r0 // r9 = height
   cmp r5, r8 // if x >= width
   bge end

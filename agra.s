@@ -102,7 +102,8 @@ line_loop:
 b end
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
-  ldmfd sp, {r2} // restore framebuffer base address
+  ldmfd sp!, {r2} // restore framebuffer base address
+  stmfd sp!, {r2}
   bl pixel
   add r10, r10, #1 // current step++
   b line_loop

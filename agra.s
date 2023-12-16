@@ -82,7 +82,7 @@ line:
 
 line_loop:
   cmp r10, r9 // if current step >= step count
-  bgt end
+  bge end
   stmfd sp!, {r2}
   mul r0, r10, r7 // r0 = current step * delta x
   mov r1, r9 // r1 = step count
@@ -93,6 +93,7 @@ line_loop:
   bl divide // r0 = y_current
   mov r1, r0 // r1 = y_current
   ldmfd sp!, {r0}// restore x_current
+  b end
 // draw pixel
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0

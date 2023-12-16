@@ -20,9 +20,9 @@ pixel:
   cmp r6, #0 // if y < 0
   blt end
   mov r0, #4
-  mul r5, r5, r0 // x *= 4
-  mul r6, r6, r8 // y *= width
-  add r5, r5, r6 // x += y
+  mul r1, r5, r0 // x *= 4
+  mul r2, r6, r8 // y *= width
+  add r5, r1, r2 // x += y
 
   bl FrameBufferGetAddress // r0 = framebuffer base address
   // Calculate the pixel address in r5

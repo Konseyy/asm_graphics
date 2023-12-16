@@ -3,6 +3,7 @@
 .global pixel
 .type pixel, %function
 
+@ pixel(x, y, *color)
 pixel:
   stmfd sp!, {r0-r12, lr}
   mov r5, r0 // r5 = x
@@ -21,19 +22,20 @@ pixel:
   cmp r6, #0 // if y < 0
   blt end
   mov r0, #4
-  mul r1, r5, r0 // x *= 4
+  mul r1, r5, r0 // x *= 4 (4 bytes per pixel)
   mul r2, r6, r8 // y *= width
-  add r5, r1, r2 // x += y
+  add r5, r1, r2 // x += y (offset from the beginning of the framebuffer)
 
   bl FrameBufferGetAddress // r0 = framebuffer base address
-  // Calculate the pixel address in r5
-  ADD r5, r0, r5           // Add the offset to the base address to get the pixel address
+// Calculate the pixel address in r5
+// Add the offset to the base address to get the pixel address
+  add r5, r0, r5
 
-  // Load the color value
-  LDR r10, [r7]            // Load the 32-bit color value from the color pointer
+// Load the 32-bit color value from the color pointer
+  ldr r10, [r7]
 
-  // Store the color value at the pixel address
-  STR r10, [r5]            // Store the color value in the framebuffer
+// Store the color value at the pixel address of the framebuffer
+  str r10, [r5]
 end:
   ldmfd sp!, {r0-r12, lr}
   bx lr // return

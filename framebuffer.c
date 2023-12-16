@@ -5,6 +5,8 @@
 #define frameWidth 40
 #define frameHeight 20
 
+// Frame buffer that contains all pixels
+// First element is used as currently set color
 pixcolor_t *frameBuffer = 0;
 
 // Kadra bufera sākuma adrese
@@ -15,13 +17,18 @@ pixcolor_t *FrameBufferGetAddress()
     return frameBuffer;
 
   // If buffer does not exist, create it
-  frameBuffer = malloc(frameWidth * frameHeight * sizeof(pixcolor_t));
+  frameBuffer = malloc((frameWidth * frameHeight + 1) * sizeof(pixcolor_t));
   // Fill buffer with default color
+  pixcolor_t *curr_color = &frameBuffer[0];
+  (*curr_color).r = 0;
+  (*curr_color).g = 0;
+  (*curr_color).b = 0;
+  (*curr_color).op = 0;
   for (int i = 0; i < frameHeight; i++)
   {
     for (int j = 0; j < frameWidth; j++)
     {
-      pixcolor_t *pixel = &frameBuffer[i * frameWidth + j];
+      pixcolor_t *pixel = &frameBuffer[i * frameWidth + j + 1];
       (*pixel).r = 0;
       (*pixel).g = 0;
       (*pixel).b = 0;
@@ -50,7 +57,7 @@ int FrameShow()
   {
     for (int j = 0; j < frameWidth; j++)
     {
-      pixcolor_t pixel = frameBuffer[i * frameWidth + j];
+      pixcolor_t pixel = frameBuffer[i * frameWidth + j + 1];
       char color = ' ';
       if (pixel.r > 0 && pixel.g > 0 && pixel.b > 0)
       {

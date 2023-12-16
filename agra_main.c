@@ -20,8 +20,10 @@ int main()
   // pixel(0, 1, &(pixcolor_t){0, 0, 1, 0});
 
   setPixColor(&(pixcolor_t){1, 0, 1, 0});
-  
   line(19, 3, 0, 6);
+
+  setPixColor(&(pixcolor_t){0, 1, 1, 0});
+  line(10, 0, 44, 22);
 
   FrameShow();
   return 0;

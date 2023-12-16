@@ -14,7 +14,7 @@ int main()
   {
     for (int j = 0; j < frameHeight; j++)
     {
-      pixel(i, j, &(pixcolor_t){1, 1, 1, 0});
+      pixel(j, i, &(pixcolor_t){1, 1, 1, 0});
     }
   }
 

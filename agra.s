@@ -20,6 +20,7 @@ pixel:
   bl FrameBufferGetHeight
   mov r9, r0 // r9 = height
   cmp r5, r8 // if x >= width
+  b end
   bge end
   cmp r6, r9 // if y >= height
   bge end
@@ -43,7 +44,7 @@ pixel:
   ldr r10, [r7]
 
 // Store the color value at the pixel address of the framebuffer
-  @ str r10, [r5]
+  str r10, [r5]
   b end
 
 @ setPixColor(*color)

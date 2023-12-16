@@ -72,9 +72,9 @@ line:
   mov r8, r0 // r8 = delta x
   mov r12, r1 // r12 = delta y
 // slope = r8 / r12
-  ldr r0, f__i @ Load address of format string into r0
-  mov r1, r8 // Load delta x into r1
-  bl printf // Print delta x
+  @ ldr r0, f__i @ Load address of format string into r0
+  @ mov r1, r8 // Load delta x into r1
+  @ bl printf // Print delta x
   ldr r0, f__i @ Load address of format string into r0
   mov r1, r12 // Load delta y into r1
   bl printf // Print delta y

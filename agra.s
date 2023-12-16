@@ -100,10 +100,10 @@ line_loop:
   add r1, r1, r6 // y_icrement += y0
   stmfd sp!, {r0, r1} // save x_increment, y_increment
   mov r1, r0
-  ldr r0, f__i // r0 = formati
+  ldr r0, f__x // r0 = formati
   bl printf // print x_increment
   ldmfd sp, {r0, r1} // restore x_increment, y_increment
-  ldr r0, f__i // r0 = formati
+  ldr r0, f__y // r0 = formati
   bl printf // print y_increment
   ldmfd sp!, {r0, r1} // restore x_increment, y_increment
   ldmfd sp!, {r2} // restore framebuffer base address
@@ -164,6 +164,10 @@ end:
 
 f__i:     .word formati
 f__r:     .word formatr
+f__x:     .word formatx
+f__y:     .word formaty
 .data
 formati:  .asciz "var: %d\n"
 formatr:  .asciz "res: %d\n"
+formatx:  .asciz "x: %d\n"
+formaty:  .asciz "y: %d\n"

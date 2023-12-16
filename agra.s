@@ -136,7 +136,7 @@ end_loop:
   // If one of them was negative, quotient is negative
   eor r3, r3, r4  // XOR flags for negative dividend and divisor
   cmp r3, #0  // Compare result with 0
-  beq end  // If result is 0, end the program as the quotient is positive
+  beq div_end  // If result is 0, end the program as the quotient is positive
   rsb r2, r2, #0  // Make quotient negative
 
 div_end:

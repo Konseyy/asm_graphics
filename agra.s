@@ -13,6 +13,9 @@ pixel:
   mov r5, r0 // r5 = x
   mov r6, r1 // r6 = y
   mov r7, r2 // r7 = color pointer
+  ldr r0, f__i
+  mov r1, r7 // r1 = x
+  bl printf
   bl FrameBufferGetWidth
   mov r8, r0 // r8 = width
   bl FrameBufferGetHeight

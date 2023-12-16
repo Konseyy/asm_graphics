@@ -60,42 +60,36 @@ line:
   mov r6, r1 // r6 = y0
   mov r7, r2 // r7 = x1
   mov r8, r3 // r8 = y1
-  bl FrameBufferGetWidth
-  mov r9, r0 // r9 = width
-  bl FrameBufferGetHeight
-  mov r10, r0 // r10 = height
   bl FrameBufferGetAddress // r0 = framebuffer base address
   mov r11, r0 // r11 = framebuffer base address
   sub r0, r7, r5 // r0 = delta x
   sub r1, r8, r6 // r1 = delta y
-// y1 coordinate no longer needed as we have the slope
-  mov r8, r0 // r8 = delta x
-  mov r12, r1 // r12 = delta y
-// b = y0 - m * x0
-  mul r0, r12, r5 // r0 = delta y * x0
-  mul r1, r8, r6 // r1 = delta x * y0
-  sub r3, r1, r0 // r3 = delta x * y0 - delta y * x0
-  mov r0, r3 // r0 = r3
-  mov r1, r8 // r1 = delta x
-  bl divide  // r0 = b / delta x
-  mov r6, r0 // r6 = y0 = b
-// slope = b = r8 / r12
-// y-intercept = b = r6
+  // End point no longer needed as we have deltas
+  mov r7, r0 // r7 = delta x
+  mov r8, r1 // r8 = delta y
+  cmp r7, r8 // if delta x >= delta y
+  movgt r9, r7 // r9 = delta x
+  movlte r9, r8 // r9 = delta y
+  // r9 = step count
+  mov r10, #0 // r10 = current step
 
 line_loop:
-  cmp r5, r7 // if x0 >= x1
+  cmp r10, r9 // if current step >= step count
   bgt end
-@ Calculate y = m * x + b
-  mul r0, r12, r5 // r0 = delta y * x_current
-  mul r1, r6, r8 // r1 = y_intercept * delta x
-  add r2, r0, r1 // r2 = delta y * x_current + y_intercept * delta x
-  mov r0, r2 // r0 = r2
-  mov r1, r8 // r1 = delta x
-  bl divide  // r0 = y_current
-  mov r6, r0 // r6 = y_current
+  mul r3, r10, r7 // r3 = current step * delta x
+  mul r4, r10, r8 // r4 = current step * delta y
+  add r11, r5, r3 // r0 = x0 + current step * delta x
+  add r12, r6, r4 // r1 = y0 + current step * delta y
+  mov r0, r11 // r0 = x0 + current step * delta x
+  mov r1, r9 // r1 = step count
+  bl divide // r0 = x_current
+  stmfd sp!, {r0} // save x_current
+  mov r0, r12 // r0 = y0 + current step * delta y
+  mov r1, r9 // r1 = step count
+  bl divide // r0 = y_current
+  mov r1, r0 // r1 = y_current
+  ldmfd sp!, {r0} // restore x_current
 // draw pixel
-  mov r0, r5 // x_current
-  mov r1, r6 // y_current
   mov r2, r11 // current color
   bl pixel
   add r5, r5, #1 // x0++

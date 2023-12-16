@@ -103,23 +103,23 @@ line_loop:
 divide:
     stmfd sp!, {r4-r11, lr}  @ Save callee-saved registers and link register
 
-    @  @ Store original r0 and r1 values
-    @ mov   r4, r0            @ Store original r0 (dividend) in r4
-    @ mov   r5, r1            @ Store original r1 (divisor) in r5
+     @ Store original r0 and r1 values
+    mov   r4, r0            @ Store original r0 (dividend) in r4
+    mov   r5, r1            @ Store original r1 (divisor) in r5
 
-    @ @ Print the dividend (original r0)
-    @ ldr   r0, f__x         @ Load address of format string into r0
-    @ mov   r1, r4            @ Move the dividend into r1 (argument for printf)
-    @ bl    printf            @ Call printf to print the dividend
+    @ Print the dividend (original r0)
+    ldr   r0, f__i         @ Load address of format string into r0
+    mov   r1, r4            @ Move the dividend into r1 (argument for printf)
+    bl    printf            @ Call printf to print the dividend
 
-    @ @ Print the divisor (original r1)
-    @ ldr   r0, f__y         @ Load address of format string into r0
-    @ mov   r1, r5            @ Move the divisor into r1 (argument for printf)
-    @ bl    printf            @ Call printf to print the divisor
+    @ Print the divisor (original r1)
+    ldr   r0, f__i         @ Load address of format string into r0
+    mov   r1, r5            @ Move the divisor into r1 (argument for printf)
+    bl    printf            @ Call printf to print the divisor
 
-    @ @ Restore original r0 and r1 values for division
-    @ mov   r0, r4            @ Restore the original value of r0 (dividend)
-    @ mov   r1, r5            @ Restore the original value of r1 (divisor)
+    @ Restore original r0 and r1 values for division
+    mov   r0, r4            @ Restore the original value of r0 (dividend)
+    mov   r1, r5            @ Restore the original value of r1 (divisor)
 
 
     @ Check for division by zero
@@ -149,7 +149,7 @@ divide:
 
     @ Print the result
     mov   r1, r0            @ Move the result into r1 (argument for printf)
-    ldr   r0, f__res         @ Load address of format string into r0
+    ldr   r0, f__i         @ Load address of format string into r0
     bl    printf            @ Call printf to print the result
 
     ldmfd sp!, {r4-r11, lr} @ Restore registers and link register
@@ -161,16 +161,30 @@ division_by_zero:
     b     print_and_return
 
 unsigned_divide:
-   @ Inputs: r4 = dividend, r5 = divisor
+    @ Inputs: r4 = dividend, r5 = divisor
     @ Output: r0 = result
     mov   r0, #0              @ Clear result register
     mov   r7, #1              @ Set r7 to 1 (counter for division loop)
 
+division_loop:
+    cmp   r5, r4, LSL #1      @ Compare shifted divisor with dividend
+    movls r5, r5, LSL #1      @ Shift divisor left if it's less or equal
+    movls r7, r7, LSL #1      @ Shift counter left if divisor shifted
+    bls   division_loop
+
+    @ Division calculation
+    subs  r4, r4, r5          @ Subtract divisor from dividend
+    addcs r0, r0, r7          @ Add counter to result if no borrow
+    movs  r7, r7, LSR #1      @ Shift counter right
+    movs  r5, r5, LSR #1      @ Shift divisor right
+    bne   unsigned_divide     @ Continue if not finished
+
+    bx    lr                  @ Return from unsigned_divide subroutine
 
 print_and_return:
     @ Print the result/error code before returning
     mov   r1, r0            @ Move the result/error code into r1
-    ldr   r0, f__res         @ Load address of format string into r0
+    ldr   r0, f__i         @ Load address of format string into r0
     bl    printf            @ Call printf to print the result/error code
 
     ldmfd sp!, {r4-r11, lr} @ Restore registers and link register
@@ -180,10 +194,6 @@ end:
   ldmfd sp!, {r4-r12, lr}
   bx lr // return
 
-f__x:     .word formatx
-f__y:     .word formaty
-f__res:   .word formatres
+f__i:     .word formati
 .data
-formatx:  .asciz "X: %d\n"
-formaty:  .asciz "Y: %d\n"
-formatres:  .asciz "Result: %d\n"
+formati:  .asciz "from assembly: %d\n"

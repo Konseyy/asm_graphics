@@ -97,10 +97,6 @@ line_loop:
   mov r6, r0 // y0 = (y0 * d_x + d_y) / delta x
   b line_loop
 
-end:
-  ldmfd sp!, {r5-r12, lr}
-  bx lr // return
-
 @ (x, y) returns x/y
 divide:
   mov r2, #0 @ r3 will hold the result

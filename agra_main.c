@@ -20,6 +20,8 @@ int main()
 
   setPixColor(&(pixcolor_t){1, 0, 1, 0});
 
+  printf("5/2 = %d, 5/3 = %d\n", divide(5, 2), divide(5, 3));
+
   line(19, 3, 0, 6);
 
   FrameShow();

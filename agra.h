@@ -46,3 +46,5 @@ int FrameBufferGetHeight();
 
 // Kadra izvadīšana uz "displeja iekārtas".
 int FrameShow();
+
+int divide(int a, int b);

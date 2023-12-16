@@ -6,6 +6,8 @@
 .type setPixColor, %function
 .global line
 .type line, %function
+.global divide
+.type divide, %function
 
 @ pixel(x, y, *color)
 pixel:

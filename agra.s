@@ -77,8 +77,7 @@ line:
 
 line_loop:
   cmp r10, r9 // if current step >= step count
-  ldmfdgt sp!, {r2} // restore framebuffer base address
-  bgt end
+  bgt line_end
   mul r11, r10, r7 // r11 = current step * delta x
   mul r12, r10, r8 // r12 = current step * delta y
   mov r0, r11 // r0 = x0 + current step * delta x
@@ -97,6 +96,11 @@ line_loop:
   bl pixel
   add r10, r10, #1 // current step++
   b line_loop
+
+line_end:
+  ldmfd sp!, {r2} // restore framebuffer base address
+  ldmfd sp!, {r5-r12, lr}
+  bx lr // return
 
 @ (x, y) returns x/y
 divide:

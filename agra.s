@@ -69,7 +69,7 @@ line:
   mov r8, r1 // r8 = delta y
   cmp r7, r8 // if delta x >= delta y
   movgt r9, r7 // r9 = delta x
-  movlte r9, r8 // r9 = delta y
+  movle r9, r8 // r9 = delta y
   // r9 = step count
   mov r10, #0 // r10 = current step
 

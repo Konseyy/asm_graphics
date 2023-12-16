@@ -103,7 +103,7 @@ line_loop:
 
 @ (x, y) returns x/y
 divide:
-  stmfd sp!, {r5-r12, lr}
+  @ stmfd sp!, {r5-r12, lr}
   @ r0 = dividend, r1 = divisor
   @ Result will be placed in r0
   stmfd sp!, {r0-r12, lr}
@@ -120,7 +120,7 @@ divide:
   ldmfd sp!, {r0-r12, lr}
   @ Check for divisor = 0 to avoid division by zero
   cmp r1, #0
-  beq divide_by_zero
+  beq end
 
   @ Preserve the sign of the result
   mrs r2, CPSR         @ Move the current program status register to r2

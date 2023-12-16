@@ -130,7 +130,7 @@ divide:
 
     @ Print the result
     mov   r1, r0            @ Move the result into r1 (argument for printf)
-    ldr   r0, =f__i         @ Load address of format string into r0
+    ldr   r0, f__i         @ Load address of format string into r0
     bl    printf            @ Call printf to print the result
 
     ldmfd sp!, {r4-r11, lr} @ Restore registers and link register
@@ -147,7 +147,7 @@ unsigned_divide:
 print_and_return:
     @ Print the result/error code before returning
     mov   r1, r0            @ Move the result/error code into r1
-    ldr   r0, =f__i         @ Load address of format string into r0
+    ldr   r0, f__i         @ Load address of format string into r0
     bl    printf            @ Call printf to print the result/error code
 
     ldmfd sp!, {r4-r11, lr} @ Restore registers and link register

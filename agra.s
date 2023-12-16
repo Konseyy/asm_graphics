@@ -45,7 +45,7 @@ pixel:
   b end
 
 @ setPixColor(*color)
-setPixColor:
+setpixcolor:
   stmfd sp!, {r5-r12, lr}
   mov r5, r0 // r5 = color pointer
   bl FrameBufferGetAddress // r0 = framebuffer base address
@@ -88,6 +88,11 @@ line_loop:
   mov r1, r0 // r1 = y_current
   ldmfd sp!, {r0}// restore x_current
 // draw pixel
+  stmfd sp!, {r0-r12, lr}
+  ldr r0, f__i
+  add r1, r0, r5
+  bl printf
+  ldmfd sp!, {r0-r12, lr}
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
   mov r2, r11 // current color

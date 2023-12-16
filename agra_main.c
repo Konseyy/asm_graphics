@@ -20,7 +20,7 @@ int main()
 
   setPixColor(&(pixcolor_t){1, 0, 1, 0});
 
-  line(3,3,6,12);
+  line(3,3,12,6);
 
   FrameShow();
   return 0;

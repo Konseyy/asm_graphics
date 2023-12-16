@@ -53,9 +53,9 @@ int FrameBufferGetHeight()
 // Kadra izvadīšana uz "displeja iekārtas".
 int FrameShow()
 {
-  for (int i = 0; i < frameHeight; i++)
+  for (int i = frameHeight - 1; i >= 0; i--)
   {
-    for (int j = frameWidth - 1; j >= 0; j--)
+    for (int j = 0; j < frameWidth; j++)
     {
       pixcolor_t pixel = frameBuffer[i * frameWidth + j + 1];
       char color = ' ';

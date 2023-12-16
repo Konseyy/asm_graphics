@@ -4,6 +4,7 @@
 .type pixel, %function
 
 pixel:
+  stmfd sp!, {r0-r12, lr}
   mov r5, r0 // r5 = x
   mov r6, r1 // r6 = y
   mov r7, r2 // r7 = color pointer
@@ -34,4 +35,5 @@ pixel:
   // Store the color value at the pixel address
   STR r10, [r5]            // Store the color value in the framebuffer
 end:
+  ldmfd sp!, {r0-r12, lr}
   bx lr // return

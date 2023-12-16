@@ -101,7 +101,7 @@ line_loop:
 
 @ (x, y) returns x/y
 divide:
-  stmfd sp!, {r4-r12, lr}
+  stmfd sp!, {r0-r12, lr}
   @ r0 = dividend, r1 = divisor
   @ Result will be placed in r0
   @ stmfd sp!, {r4-r12, lr}
@@ -160,7 +160,7 @@ divison_end:
   mov r1, #-111
   bl printf
   ldmfd sp!, {r0-r12, lr}
-  ldmfd sp!, {r4-r12, lr}
+  ldmfd sp!, {r0-r12, lr}
   bx lr
 
 end:

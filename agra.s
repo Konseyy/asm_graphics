@@ -68,9 +68,13 @@ line:
 // End point no longer needed as we have deltas
   mov r7, r0 // r7 = delta x
   mov r8, r1 // r8 = delta y
-  cmp r7, r8 // if delta x >= delta y
-  movgt r9, r7 // r9 = delta x
-  movle r9, r8 // r9 = delta y
+  cmp r7, #0
+  rsblt r0, r0, #0 // r0 = -delta x
+  cmp r8, #0
+  rsblt r1, r1, #0 // r1 = -delta y
+  cmp r0, r1 // if delta x > delta y
+  movgt r9, r0 // r9 = delta x
+  movle r9, r1 // r9 = delta y
 // r9 = step count
   mov r10, #0 // r10 = current step
 

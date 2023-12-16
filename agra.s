@@ -103,8 +103,43 @@ line_loop:
 
 @ (x, y) returns x/y
 divide:
-  sdiv r0, r0, r1
+    @ R0 = dividend, R1 = divisor, R2 = quotient, R3 = remainder
+    @ R4 = temporary register for sign handling
+
+    MOV R2, #0      @ Clear quotient
+    MOV R3, R0      @ Set remainder to dividend
+    MOV R4, #1      @ Set the sign flag to positive
+
+    @ Check and make dividend positive, record if it was negative
+    CMP R0, #0
+    BGE DIV_POSITIVE
+    NEG R3, R3      @ Make remainder positive
+    EOR R4, R4, #1  @ Flip sign flag
+
+DIV_POSITIVE:
+    @ Check and make divisor positive, record if it was negative
+    CMP R1, #0
+    BGE DIV_LOOP
+    NEG R1, R1      @ Make divisor positive
+    EOR R4, R4, #1  @ Flip sign flag
+
+DIV_LOOP:
+    CMP R3, R1      @ Compare remainder with divisor
+    BLT END_DIV     @ If remainder < divisor, division is done
+    SUB R3, R3, R1  @ Subtract divisor from remainder
+    ADD R2, R2, #1  @ Increment quotient
+    B DIV_LOOP
+
+END_DIV:
+    @ Adjust quotient sign if necessary
+    CMP R4, #1
+    BEQ END_DIV         @ If sign flag is positive, we are done
+    NEG R2, R2      @ Otherwise, negate the quotient
+
+END_DIV:
+  mov r0, r2 // return quotient
   bx lr
+    @ At this point, R2 = quotient, R3 = remainder
 
 end:
   ldmfd sp!, {r4-r12, lr}

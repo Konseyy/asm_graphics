@@ -75,6 +75,11 @@ line:
   mov r10, #0 // r10 = current step
 
 line_loop:
+  stmfd sp!, {r0-r12, lr} // save variables
+  ldr r0, f__i
+  mov r1, r10
+  bl printf
+  ldmfd sp!, {r0-r12, lr} // restore variables
   cmp r10, r9 // if current step >= step count
   bgt end
   stmfd sp!, {r2}

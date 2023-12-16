@@ -123,7 +123,7 @@ divide_loop:
   b divide_loop
 
 divide_end:
-  cmp r1, r0 LSL #1 // if y >= x * 2
+  cmp r1, r0, LSL #1 // if y >= x * 2
   addge r0, r2, #1 // result++
   mul r0, r2, r4 // r0 = result * sign
   ldmfd sp!, {r4-r12, lr}

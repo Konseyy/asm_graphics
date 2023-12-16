@@ -103,23 +103,23 @@ line_loop:
 divide:
     stmfd sp!, {r4-r11, lr}  @ Save callee-saved registers and link register
 
-     @ Store original r0 and r1 values
-    mov   r4, r0            @ Store original r0 (dividend) in r4
-    mov   r5, r1            @ Store original r1 (divisor) in r5
+    @  @ Store original r0 and r1 values
+    @ mov   r4, r0            @ Store original r0 (dividend) in r4
+    @ mov   r5, r1            @ Store original r1 (divisor) in r5
 
-    @ Print the dividend (original r0)
-    ldr   r0, f__x         @ Load address of format string into r0
-    mov   r1, r4            @ Move the dividend into r1 (argument for printf)
-    bl    printf            @ Call printf to print the dividend
+    @ @ Print the dividend (original r0)
+    @ ldr   r0, f__x         @ Load address of format string into r0
+    @ mov   r1, r4            @ Move the dividend into r1 (argument for printf)
+    @ bl    printf            @ Call printf to print the dividend
 
-    @ Print the divisor (original r1)
-    ldr   r0, f__y         @ Load address of format string into r0
-    mov   r1, r5            @ Move the divisor into r1 (argument for printf)
-    bl    printf            @ Call printf to print the divisor
+    @ @ Print the divisor (original r1)
+    @ ldr   r0, f__y         @ Load address of format string into r0
+    @ mov   r1, r5            @ Move the divisor into r1 (argument for printf)
+    @ bl    printf            @ Call printf to print the divisor
 
-    @ Restore original r0 and r1 values for division
-    mov   r0, r4            @ Restore the original value of r0 (dividend)
-    mov   r1, r5            @ Restore the original value of r1 (divisor)
+    @ @ Restore original r0 and r1 values for division
+    @ mov   r0, r4            @ Restore the original value of r0 (dividend)
+    @ mov   r1, r5            @ Restore the original value of r1 (divisor)
 
 
     @ Check for division by zero

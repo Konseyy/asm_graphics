@@ -82,7 +82,7 @@ line_loop:
   add r12, r6, r4 // r1 = y0 + current step * delta y
   mov r0, r11 // r0 = x0 + current step * delta x
   mov r1, r9 // r1 = step count
-  b divide // r0 = x_current
+  bl divide // r0 = x_current
   stmfd sp!, {r0} // save x_current
   mov r0, r12 // r0 = y0 + current step * delta y
   mov r1, r9 // r1 = step count

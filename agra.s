@@ -152,14 +152,14 @@ division_calculation:
   b divison_end
 
 divison_end:
-  stmfd sp!, {r4-r12, lr}
+  stmfd sp!, {r0-r12, lr}
   mov r1, r0
   ldr r0, f__i
   bl printf
   ldr r0, f__i
   mov r1, #-111
   bl printf
-  ldmfd sp!, {r4-r12, lr}
+  ldmfd sp!, {r0-r12, lr}
   bx lr
 
 end:

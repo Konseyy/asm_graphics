@@ -20,7 +20,6 @@ pixel:
   bl FrameBufferGetHeight
   mov r9, r0 // r9 = height
   cmp r5, r8 // if x >= width
-  b end
   bge end
   cmp r6, r9 // if y >= height
   bge end
@@ -34,6 +33,7 @@ pixel:
   mul r3, r2, r0 // y *= 4 (4 bytes per pixel)
   add r5, r1, r3 // x += y (offset from the beginning of the framebuffer)
   add r5, r5, #4 // x += 4 (skip the first 4 bytes of the framebuffer)
+  b end
 
   bl FrameBufferGetAddress // r0 = framebuffer base address
 // Calculate the pixel address in r5

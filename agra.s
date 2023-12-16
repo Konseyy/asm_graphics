@@ -68,9 +68,9 @@ line:
 // End point no longer needed as we have deltas
   mov r7, r0 // r7 = delta x
   mov r8, r1 // r8 = delta y
-  cmp r7, #0
+  cmp r0, #0
   rsblt r0, r0, #0 // r0 = -delta x
-  cmp r8, #0
+  cmp r1, #0
   rsblt r1, r1, #0 // r1 = -delta y
   cmp r0, r1 // if delta x > delta y
   movgt r9, r0 // r9 = delta x
@@ -106,21 +106,21 @@ divide:
   stmfd sp!, {r5-r12, lr}
   @ r0 = dividend, r1 = divisor
   @ Result will be placed in r0
-  stmfd sp!, {r5-r12, lr}
+  stmfd sp!, {r0-r12, lr}
   mov r1, r0
   ldr r0, f__i
   bl printf
-  ldmfd sp!, {r5-r12, lr}
-  stmfd sp!, {r5-r12, lr}
+  ldmfd sp!, {r0-r12, lr}
+  stmfd sp!, {r0-r12, lr}
   ldr r0, f__i
   bl printf
   ldr r0, f__i
-  mov r1, #-111
+  mov r1, #111111111
   bl printf
-  ldmfd sp!, {r5-r12, lr}
+  ldmfd sp!, {r0-r12, lr}
   @ Check for divisor = 0 to avoid division by zero
   cmp r1, #0
-  beq end
+  beq divide_by_zero
 
   @ Preserve the sign of the result
   mrs r2, CPSR         @ Move the current program status register to r2
@@ -153,6 +153,10 @@ division_calculation:
   add r0, r5, #1           @ Add 1 for rounding
   asrs r0, r0, #1          @ Shift right to divide by 2 (rounding)
   orr r0, r0, r4           @ Apply the original sign to the result
+  b end
+
+divide_by_zero:
+  mov r0, #0
   b end
 
 end:

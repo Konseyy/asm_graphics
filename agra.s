@@ -105,14 +105,14 @@ line_loop:
 @ (x, y) returns x/y
 divide:
   stmfd sp!, {r4-r12, lr}
-  stmfd sp!, {r0-r3} // save arguments
+  stmfd sp!, {r0-r3, lr} // save arguments
   mov r1, r0 // r1 = x
   ldr r0, f__i // r0 = formati
   bl printf // print x
-  ldmfd sp, {r0-r3} // restore arguments
+  ldmfd sp, {r0-r3, lr} // restore arguments
   ldr r0, f__i // r0 = formati
   bl printf // print y
-  ldmfd sp!, {r0-r3} // restore arguments
+  ldmfd sp!, {r0-r3, lr} // restore arguments
   mov r4, #1 // -1 if result negative, otherwise 1
   cmp r0, #0
   rsblt r0, r0, #0 // r0 = -x
@@ -135,6 +135,11 @@ divide_end:
   cmp r1, r0, LSL #1 // if y >= x * 2
   addge r0, r2, #1 // result++
   mul r0, r2, r4 // r0 = result * sign
+  stmfd sp!, {r0, lr} // save result
+  mov r1, r0 // r1 = result
+  ldr r0, f__i // r0 = formati
+  bl printf // print result
+  ldmfd sp!, {r0, lr} // restore arguments
   ldmfd sp!, {r4-r12, lr}
   bx lr // return
 
@@ -148,5 +153,7 @@ end:
   bx lr // return
 
 f__i:     .word formati
+f__r:     .word formatr
 .data
-formati:  .asciz "from assembly: %d\n"
+formati:  .asciz "var: %d\n"
+formatr:  .asciz "res: %d\n"

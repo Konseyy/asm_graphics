@@ -11,6 +11,15 @@
 
 @ pixel(x, y, *color)
 pixel:
+  stmfd sp!, {r0, r1} // save x_increment, y_increment
+  mov r1, r0
+  ldr r0, f__x // r0 = formati
+  bl printf // print x_increment
+  ldmfd sp, {r0, r1} // restore x_increment, y_increment
+  ldr r0, f__y // r0 = formati
+  bl printf // print y_increment
+  ldmfd sp!, {r0, r1} // restore x_increment, y_increment
+  ldmfd sp!, {r2} // restore framebuffer base address
   stmfd sp!, {r4-r12, lr}
   mov r5, r0 // r5 = x
   mov r6, r1 // r6 = y
@@ -98,15 +107,6 @@ line_loop:
 // draw pixel
   add r0, r0, r5 // x_increment += x0
   add r1, r1, r6 // y_icrement += y0
-  stmfd sp!, {r0, r1} // save x_increment, y_increment
-  mov r1, r0
-  ldr r0, f__x // r0 = formati
-  bl printf // print x_increment
-  ldmfd sp, {r0, r1} // restore x_increment, y_increment
-  ldr r0, f__y // r0 = formati
-  bl printf // print y_increment
-  ldmfd sp!, {r0, r1} // restore x_increment, y_increment
-  ldmfd sp!, {r2} // restore framebuffer base address
   bl pixel
   @ b end
   add r10, r10, #1 // current step++

@@ -92,7 +92,7 @@ line_loop:
 // draw pixel
   mov r2, r11 // current color
   bl pixel
-  add r5, r5, #1 // x0++
+  add r10, r10, #1 // x0++
   b line_loop
 
 @ (x, y) returns x/y

@@ -75,18 +75,18 @@ line:
 
 line_loop:
   cmp r10, r9 // if current step >= step count
-  b end
+  bgt end
   mul r3, r10, r7 // r3 = current step * delta x
   mul r4, r10, r8 // r4 = current step * delta y
   add r11, r5, r3 // r0 = x0 + current step * delta x
   add r12, r6, r4 // r1 = y0 + current step * delta y
   mov r0, r11 // r0 = x0 + current step * delta x
   mov r1, r9 // r1 = step count
-  bl divide // r0 = x_current
+  b divide // r0 = x_current
   stmfd sp!, {r0} // save x_current
   mov r0, r12 // r0 = y0 + current step * delta y
   mov r1, r9 // r1 = step count
-  bl divide // r0 = y_current
+  b divide // r0 = y_current
   mov r1, r0 // r1 = y_current
   ldmfd sp!, {r0} // restore x_current
 // draw pixel

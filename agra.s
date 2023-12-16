@@ -68,9 +68,9 @@ line:
 // End point no longer needed as we have deltas
   mov r7, r0 // r7 = delta x
   mov r8, r1 // r8 = delta y
-  cmp r0, #0
+  cmp r7, #0
   rsblt r0, r0, #0 // r0 = -delta x
-  cmp r1, #0
+  cmp r8, #0
   rsblt r1, r1, #0 // r1 = -delta y
   cmp r0, r1 // if delta x > delta y
   movgt r9, r0 // r9 = delta x
@@ -84,11 +84,9 @@ line_loop:
   stmfd sp!, {r2}
   mul r11, r10, r7 // r11 = current step * delta x
   mul r12, r10, r8 // r12 = current step * delta y
-  stmfd sp!, {r12}
   mov r0, r11 // r0 = x0 + current step * delta x
   mov r1, r9 // r1 = step count
   bl divide // r0 = x_current
-  ldmfd sp!, {r12} // restore r12
   stmfd sp!, {r0}// save x_current
   mov r0, r12 // r0 = y0 + current step * delta y
   mov r1, r9 // r1 = step count
@@ -122,7 +120,7 @@ divide:
   ldmfd sp!, {r5-r12, lr}
   @ Check for divisor = 0 to avoid division by zero
   cmp r1, #0
-  beq divide_by_zero
+  beq end
 
   @ Preserve the sign of the result
   mrs r2, CPSR         @ Move the current program status register to r2
@@ -155,10 +153,6 @@ division_calculation:
   add r0, r5, #1           @ Add 1 for rounding
   asrs r0, r0, #1          @ Shift right to divide by 2 (rounding)
   orr r0, r0, r4           @ Apply the original sign to the result
-  b end
-
-divide_by_zero:
-  mov r0, #0
   b end
 
 end:

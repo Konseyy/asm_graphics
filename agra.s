@@ -113,26 +113,10 @@ triangleFill:
   ldr r8, [sp, #0] // r8 = x3
   ldr r9, [sp, #4] // r9 = y3
 
-  
-  ldr r0, f__i
-  ldr r1, [sp, #0]
-  bl printf
-  ldr r0, f__i
-  mov r1, r7
-  bl printf
-  ldr r0, f__i
-  ldr r1, [sp, #4]
-  bl printf
-  ldr r0, f__i
-  ldr r1, [sp, #8]
-  bl printf
-
   stmfd sp!, {r4-r12, lr}
 
 
-  stmfd sp!, {r4}
   bl FrameBufferGetAddress // r0 = framebuffer base address
-  ldmfd sp!, {r4}
   mov r10, r0 // r10 = framebuffer base address
 
   mov r0, r4 // r0 lowest x value
@@ -169,7 +153,37 @@ triangleFill:
   ldr r0, f__y
   bl printf
   ldmfd sp!, {r0-r3} // restore x_min, y_min, x_max, y_max
-  b end
+
+for_x:
+  cmp r0, r2 // if x_min > x_max
+  bgt after_loop // finish loop
+  mov r1, r11
+for_y:
+  cmp r1, r3 // if y_min > y_max
+  addgt r0, r0, #1 // x0++
+  bgt for_x // next x
+  // loop body
+
+  stmfd sp!, {r0-r3} // save x_min, y_min, x_max, y_max
+  mov r1, r0
+  ldr r0, f__i
+  bl printf
+  ldmfd sp, {r0-r3} // restore x_min, y_min, x_max, y_max
+  ldr r0, f__i
+  bl printf
+  ldmfd sp!, {r0-r3} // restore x_min, y_min, x_max, y_max
+
+  stmfd sp!, {r0-r3} // save x0, y0, x_max, y_max
+  mov r2, r10 // r2 = framebuffer base address
+  bl pixel // draw pixel
+  ldmfd sp!, {r0-r3}
+  // cleanup
+  add r1, r1, #1 // y0++
+  b for_y // next y
+
+after_loop:
+  ldmfd sp!, {r4-r12, lr}
+  bx lr // return
 
 
 

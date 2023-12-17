@@ -114,7 +114,9 @@ triangleFill:
   ldr r8, [sp, #0] // r8 = x3
   ldr r9, [sp, #4] // r9 = y3
 
+  stmfd sp!, {r4}
   bl FrameBufferGetAddress // r0 = framebuffer base address
+  ldmfd sp!, {r4}
   mov r10, r0 // r10 = framebuffer base address
 
   mov r0, r4 // r0 lowest x value

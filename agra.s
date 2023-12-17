@@ -6,8 +6,8 @@
 .type setPixColor, %function
 .global line
 .type line, %function
-.global divide
-.type divide, %function
+.global triangleFill
+.type triangleFill, %function
 
 @ pixel(x, y, *color)
 pixel:
@@ -103,6 +103,23 @@ line_loop:
   @ b end
   add r10, r10, #1 // current step++
   b line_loop
+
+@ triangleFill(int x1, int y1, int x2, int y2, int x3, int y3)
+triangleFill:
+  stmfd sp!, {r4-r12, lr}
+  ldr r0, f__i
+  ldr r1, sp, #0
+  bl printf
+  ldr r0, f__i
+  ldr r1, sp, #4
+  bl printf
+  ldr r0, f__i
+  ldr r1, sp, #8
+  bl printf
+  ldr r0, f__i
+  ldr r1, sp, #12
+  bl printf
+  b end
 
 @ (x, y) returns x/y
 divide:

@@ -25,6 +25,8 @@ int main()
   setPixColor(&(pixcolor_t){0, 1, 1, 0});
   line(10, 0, 44, 22);
 
+  triangleFill(10, 10, 20, 10, 15, 20);
+
   FrameShow();
   return 0;
 }

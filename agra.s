@@ -278,7 +278,7 @@ circle:
 circle_loop:
   cmp r7, r8 // if x_offset > y_offset
   bgt end // finish loop
-
+  b end
   add r0, r4, r7 // x0 = x1 + x_offset
   add r1, r5, r8 // y0 = y1 + y_offset
   mov r2, r10

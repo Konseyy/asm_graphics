@@ -367,13 +367,3 @@ divide_by_zero:
 end:
   ldmfd sp!, {r4-r12, lr}
   bx lr // return
-
-f__i:     .word formati
-f__r:     .word formatr
-f__x:     .word formatx
-f__y:     .word formaty
-.data
-formati:  .asciz "var: %d\n"
-formatr:  .asciz "res: %d\n"
-formatx:  .asciz "x: %d\n"
-formaty:  .asciz "y: %d\n"

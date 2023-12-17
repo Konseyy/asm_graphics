@@ -141,9 +141,12 @@ triangleFill:
   cmp r3, r9 // if y2 > y3
   movgt r3, r9 // r3 = y3
 
+  mov r11, r1 // r11 = y_min
+
 for_x:
   cmp r0, r2 // if x_min > x_max
   bgt after_loop // finish loop
+  mov r1, r11
 for_y:
   cmp r1, r3 // if y_min > y_max
   addgt r0, r0, #1 // x0++

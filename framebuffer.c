@@ -87,7 +87,7 @@ int FrameShow()
       {
         color = 'B';
       }
-      printf("%c", color);
+      printf("%c ", color);
     }
     printf("\n");
   }

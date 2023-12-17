@@ -106,20 +106,60 @@ line_loop:
 
 @ triangleFill(int x1, int y1, int x2, int y2, int x3, int y3)
 triangleFill:
-  ldr r0, f__i
-  ldr r1, [sp, #0]
-  bl printf
-  ldr r0, f__i
-  ldr r1, [sp, #4]
-  bl printf
-  ldr r0, f__i
-  ldr r1, [sp, #8]
-  bl printf
-  ldr r0, f__i
-  ldr r1, [sp, #12]
-  bl printf
   stmfd sp!, {r4-r12, lr}
-  b end
+  mov r4, r0 // r4 = x1
+  mov r5, r1 // r5 = y1
+  mov r6, r2 // r6 = x2
+  mov r7, r3 // r7 = y2
+  ldr r8, [sp, #0] // r8 = x3
+  ldr r9, [sp, #4] // r9 = y3
+
+  bl FrameBufferGetAddress // r0 = framebuffer base address
+  mov r10, r0 // r10 = framebuffer base address
+
+  mov r0, r4 // r0 lowest x value
+  cmp r4, r6 // if x1 < x2
+  movlt r0, r6 // r0 = x2
+  cmp r0, r8 // if x0 < x3
+  movlt r0, r8 // r0 = x3
+
+  mov r1, r5 // r1 lowest y value
+  cmp r5, r7 // if y1 < y2
+  movlt r1, r7 // r1 = y2
+  cmp r1, r9 // if y0 < y3
+  movlt r1, r9 // r1 = y3
+
+  mov r2, r4 // r2 highest x value
+  cmp r4, r6 // if x1 > x2
+  movgt r2, r6 // r2 = x2
+  cmp r2, r8 // if x2 > x3
+  movgt r2, r8 // r2 = x3
+
+  mov r3, r5 // r3 highest y value
+  cmp r5, r7 // if y1 > y2
+  movgt r3, r7 // r3 = y2
+  cmp r3, r9 // if y2 > y3
+  movgt r3, r9 // r3 = y3
+
+for_x:
+  cmp r0, r2 // if x_min > x_max
+  bgt after_loop // finish loop
+for_y:
+  cmp r1, r3 // if y_min > y_max
+  addgt r0, r0, #1 // x0++
+  bgt for_x // next x
+  // loop body
+  stmfd sp!, {r0-r3} // save x0, y0, x_max, y_max
+  mov r2, r10 // r2 = framebuffer base address
+  bl pixel // draw pixel
+  ldmfd sp!, {r0-r3}
+  // cleanup
+  add r1, r1, #1 // y0++
+  b for_y // next y
+
+after_loop:
+  ldmfd sp!, {r4-r12, lr}
+  bx lr // return
 
 @ (x, y) returns x/y
 divide:

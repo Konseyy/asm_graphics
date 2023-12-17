@@ -177,7 +177,7 @@ for_y:
   mov r1, r0
   ldr r0, f__i
   bl printf
-  mov r1, r1
+  ldmfd sp, {r0-r3} // restore x_min, y_min, x_max, y_max
   ldr r0, f__i
   bl printf
   ldmfd sp!, {r0-r3} // restore x_min, y_min, x_max, y_max

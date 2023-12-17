@@ -270,7 +270,8 @@ circle:
   mov r6, r2 // r6 = radius
   mov r7, #0 // x offset
   mov r8, r6 // y offset
-  rsb r9, r6, #1 // d
+  mov r0, r6, LSL #1 // r0 = 2 * radius
+  rsb r9, r0, #3 // d
 
   bl FrameBufferGetAddress // r0 = framebuffer base address
   mov r10, r0 // r10 = framebuffer base address
@@ -312,7 +313,7 @@ circle_loop:
   bl pixel // draw pixel
 
   cmp r9, #0 // if d == 0
-  ble d_less_than_zero
+  blt d_less_than_zero
   b d_else
 
 d_less_than_zero:

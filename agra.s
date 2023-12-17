@@ -296,20 +296,20 @@ circle_loop:
   sub r1, r5, r8 // y0 = y1 - y_offset
   mov r2, r10
   bl pixel // draw pixel
-  add r0, r5, r8 // x0 = y1 + y_offset
-  add r1, r4, r7 // y0 = x1 + x_offset
+  add r0, r4, r8 // x0 = y1 + y_offset
+  add r1, r5, r7 // y0 = x1 + x_offset
   mov r2, r10
   bl pixel // draw pixel
-  sub r0, r5, r8 // x0 = y1 - y_offset
-  add r1, r4, r7 // y0 = x1 + x_offset
+  sub r0, r4, r8 // x0 = y1 - y_offset
+  add r1, r5, r7 // y0 = x1 + x_offset
   mov r2, r10
   bl pixel // draw pixel
-  add r0, r5, r8 // x0 = y1 + y_offset
-  sub r1, r4, r7 // y0 = x1 - x_offset
+  add r0, r4, r8 // x0 = y1 + y_offset
+  sub r1, r5, r7 // y0 = x1 - x_offset
   mov r2, r10
   bl pixel // draw pixel
-  sub r0, r5, r8 // x0 = y1 - y_offset
-  sub r1, r4, r7 // y0 = x1 - x_offset
+  sub r0, r4, r8 // x0 = y1 - y_offset
+  sub r1, r5, r7 // y0 = x1 - x_offset
   mov r2, r10
   bl pixel // draw pixel
 

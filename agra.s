@@ -264,8 +264,8 @@ after_loop:
 
 // circle(int x1, int y1, int radius)
 circle:
-  bx lr
   ldmfd sp!, {r4-r12, lr}
+  b end
   mov r4, r0 // r4 = x1
   mov r5, r1 // r5 = y1
   mov r6, r2 // r6 = radius

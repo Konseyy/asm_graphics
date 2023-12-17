@@ -106,7 +106,6 @@ line_loop:
 
 @ triangleFill(int x1, int y1, int x2, int y2, int x3, int y3)
 triangleFill:
-  stmfd sp!, {r4-r12, lr}
   mov r4, r0 // r4 = x1
   mov r5, r1 // r5 = y1
   mov r6, r2 // r6 = x2
@@ -114,6 +113,7 @@ triangleFill:
   ldr r8, [sp, #0] // r8 = x3
   ldr r9, [sp, #4] // r9 = y3
 
+  
   ldr r0, f__i
   ldr r1, [sp, #0]
   bl printf
@@ -126,6 +126,9 @@ triangleFill:
   ldr r0, f__i
   ldr r1, [sp, #8]
   bl printf
+
+  stmfd sp!, {r4-r12, lr}
+
 
   stmfd sp!, {r4}
   bl FrameBufferGetAddress // r0 = framebuffer base address

@@ -312,7 +312,7 @@ circle_loop:
   bl pixel // draw pixel
 
   cmp r9, #0 // if d == 0
-  blt d_less_than_zero
+  ble d_less_than_zero
   b d_else
 
 d_less_than_zero:

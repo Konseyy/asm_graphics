@@ -108,16 +108,16 @@ line_loop:
 triangleFill:
   stmfd sp!, {r4-r12, lr}
   ldr r0, f__i
-  ldr r1, sp, #0
+  ldr r1, [sp, #0]
   bl printf
   ldr r0, f__i
-  ldr r1, sp, #4
+  ldr r1, [sp, #4]
   bl printf
   ldr r0, f__i
-  ldr r1, sp, #8
+  ldr r1, [sp, #8]
   bl printf
   ldr r0, f__i
-  ldr r1, sp, #12
+  ldr r1, [sp, #12]
   bl printf
   b end
 

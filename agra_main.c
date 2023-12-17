@@ -22,7 +22,7 @@ int main()
   line(10, 0, 44, 22);
 
   setPixColor(&(pixcolor_t){1, 1, 0, 0});
-  triangleFill(10, 10, 20, 10, 15, 20);
+  triangleFill(10, 10, 20, 10, 15, 15);
 
   FrameShow();
   return 0;

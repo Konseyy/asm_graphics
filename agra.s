@@ -323,6 +323,7 @@ d_else:
   add r9, r9, #5
   sub r0, r7, r8
   add r9, r9, r0, LSL #1
+  sub r8, r8, #1
 
 d_next:
   add r7, r7, #1

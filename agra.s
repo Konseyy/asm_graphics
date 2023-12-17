@@ -8,6 +8,8 @@
 .type line, %function
 .global triangleFill
 .type triangleFill, %function
+.global circle
+.type circle, %function
 
 @ pixel(x, y, *color)
 pixel:
@@ -145,15 +147,6 @@ triangleFill:
 
   mov r11, r1 // r11 = y_min
 
-  stmfd sp!, {r0-r3} // save x_min, y_min, x_max, y_max
-  mov r1, r0
-  ldr r0, f__x
-  bl printf
-  mov r1, r11
-  ldr r0, f__y
-  bl printf
-  ldmfd sp!, {r0-r3} // restore x_min, y_min, x_max, y_max
-
 for_x:
   cmp r0, r2 // if x_min > x_max
   bgt after_loop // finish loop
@@ -178,6 +171,7 @@ for_y:
   // B = {r4, r5}
   // C = {r6, r7}
 
+  // https://stackoverflow.com/a/2049593
   // (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y)
   // D1 = sign of P A B
   sub r8, r0, r4
@@ -268,6 +262,72 @@ after_loop:
   bx lr // return
 
 
+// circle(int x1, int y1, int radius)
+circle:
+  ldmfd sp!, {r4-r12, lr}
+  mov r4, r0 // r4 = x1
+  mov r5, r1 // r5 = y1
+  mov r6, r2 // r6 = radius
+  mov r7, #0 // x offset
+  mov r8, r6 // y offset
+  rsb r9, r6, #1 // d
+
+  bl FrameBufferGetAddress // r0 = framebuffer base address
+  mov r10, r0 // r10 = framebuffer base address
+
+circle_loop:
+  cmp r7, r8 // if x_offset > y_offset
+  bgt end // finish loop
+
+  add r0, r4, r7 // x0 = x1 + x_offset
+  add r1, r5, r8 // y0 = y1 + y_offset
+  mov r2, r10
+  bl pixel // draw pixel
+  sub r0, r4, r7 // x0 = x1 - x_offset
+  add r1, r5, r8 // y0 = y1 + y_offset
+  mov r2, r10
+  bl pixel // draw pixel
+  add r0, r4, r7 // x0 = x1 + x_offset
+  sub r1, r5, r8 // y0 = y1 - y_offset
+  mov r2, r10
+  bl pixel // draw pixel
+  sub r0, r4, r7 // x0 = x1 - x_offset
+  sub r1, r5, r8 // y0 = y1 - y_offset
+  mov r2, r10
+  bl pixel // draw pixel
+  add r0, r5, r8 // x0 = y1 + y_offset
+  add r1, r4, r7 // y0 = x1 + x_offset
+  mov r2, r10
+  bl pixel // draw pixel
+  sub r0, r5, r8 // x0 = y1 - y_offset
+  add r1, r4, r7 // y0 = x1 + x_offset
+  mov r2, r10
+  bl pixel // draw pixel
+  add r0, r5, r8 // x0 = y1 + y_offset
+  sub r1, r4, r7 // y0 = x1 - x_offset
+  mov r2, r10
+  bl pixel // draw pixel
+  sub r0, r5, r8 // x0 = y1 - y_offset
+  sub r1, r4, r7 // y0 = x1 - x_offset
+  mov r2, r10
+  bl pixel // draw pixel
+
+  cmp r9, #0 // if d == 0
+  blt d_less_than_zero
+  b d_else
+
+d_less_than_zero:
+  add r9, r9, #3
+  add r9, r9, r7, LSL #1
+  b d_next
+d_else:
+  add r9, r9, #5
+  sub r0, r7, r8
+  add r9, r9, r0, LSL #1
+
+d_next:
+  add r7, r7, #1
+  b circle_loop
 
 @ (x, y) returns x/y
 divide:

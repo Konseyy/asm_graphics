@@ -106,7 +106,6 @@ line_loop:
 
 @ triangleFill(int x1, int y1, int x2, int y2, int x3, int y3)
 triangleFill:
-  stmfd sp!, {r4-r12, lr}
   ldr r0, f__i
   ldr r1, [sp, #0]
   bl printf
@@ -119,6 +118,7 @@ triangleFill:
   ldr r0, f__i
   ldr r1, [sp, #12]
   bl printf
+  stmfd sp!, {r4-r12, lr}
   b end
 
 @ (x, y) returns x/y

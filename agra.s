@@ -275,16 +275,21 @@ circle:
 
   bl FrameBufferGetAddress // r0 = framebuffer base address
   mov r10, r0 // r10 = framebuffer base address
+  bl draw_circle
 
 circle_loop:
   cmp r7, r8 // if x_offset > y_offset
 
   add r7, r7, #1
-
+  bl draw_circle
   cmp r9, #0 // if d == 0
   blgt d_positive
   bl d_else
 
+  
+  b circle_loop
+
+draw_circle:
   bgt end // finish loop
   add r0, r4, r7 // x0 = x1 + x_offset
   add r1, r5, r8 // y0 = y1 + y_offset
@@ -318,7 +323,7 @@ circle_loop:
   sub r1, r4, r7 // y0 = x1 - x_offset
   mov r2, r10
   bl pixel // draw pixel
-  b circle_loop
+  bx lr
   
 
 d_positive:

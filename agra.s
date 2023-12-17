@@ -178,7 +178,6 @@ for_y:
   ldmfd sp!, {r0-r3}
   // cleanup
   add r1, r1, #1 // y0++
-  b end
   b for_y // next y
 
 after_loop:

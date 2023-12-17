@@ -193,7 +193,7 @@ for_y:
 
   sub r8, r8 ,r9 // D1 = sign of P A B
   cmp r8, #0 // if D1 == 0
-  mov r9 #0
+  mov r9, #0
   movlt r9, #-1 // r9 = -1 if D1 < 0
   movgt r9, #1 // r9 = 1 if D1 > 0
   stmfd sp!, {r9}
@@ -212,7 +212,7 @@ for_y:
 
   sub r8, r8 ,r9 // D2 = sign of P B C
   cmp r8, #0 // if D2 == 0
-  mov r9 #0
+  mov r9, #0
   movlt r9, #-1 // r9 = -1 if D2 < 0
   movgt r9, #1 // r9 = 1 if D2 > 0
   stmfd sp!, {r9}
@@ -231,7 +231,7 @@ for_y:
 
   sub r8, r8 ,r9 // D3 = sign of P C A
   cmp r8, #0 // if D3 == 0
-  mov r9 #0
+  mov r9, #0
   movlt r9, #-1 // r9 = -1 if D3 < 0
   movgt r9, #1 // r9 = 1 if D3 > 0
   stmfd sp!, {r9}

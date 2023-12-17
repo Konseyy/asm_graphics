@@ -59,31 +59,31 @@ int FrameShow()
     {
       pixcolor_t pixel = frameBuffer[i * frameWidth + j + 1];
       char color = ' ';
-      if (pixel.r > 0 && pixel.g > 0 && pixel.b > 0)
+      if (pixel.r > 0x0200 && pixel.g > 0x0200 && pixel.b > 0x0200)
       {
         color = '*';
       }
-      else if (pixel.r > 0 && pixel.g > 0)
+      else if (pixel.r > 0x0200 && pixel.g > 0x0200 && pixel.b < 0x0200)
       {
         color = 'Y';
       }
-      else if (pixel.r > 0 && pixel.b > 0)
+      else if (pixel.r > 0x0200 && pixel.g < 0x0200 && pixel.b > 0x0200)
       {
         color = 'M';
       }
-      else if (pixel.g > 0 && pixel.b > 0)
+      else if (pixel.r < 0x0200 && pixel.g > 0x0200 && pixel.b > 0x0200)
       {
         color = 'C';
       }
-      else if (pixel.r > 0)
+      else if (pixel.r > 0x0200 && pixel.g < 0x0200 && pixel.b < 0x0200)
       {
         color = 'R';
       }
-      else if (pixel.g > 0)
+      else if (pixel.g > 0x0200 && pixel.r < 0x0200 && pixel.b < 0x0200)
       {
         color = 'G';
       }
-      else if (pixel.b > 0)
+      else if (pixel.b > 0x0200 && pixel.r < 0x0200 && pixel.g < 0x0200)
       {
         color = 'B';
       }

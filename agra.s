@@ -154,6 +154,15 @@ triangleFill:
   bl printf
   ldmfd sp!, {r0-r3} // restore x_min, y_min, x_max, y_max
 
+  stmfd sp!, {r0-r3} // save x_min, y_min, x_max, y_max
+  mov r1, r3
+  ldr r0, f__x
+  bl printf
+  mov r1, r4
+  ldr r0, f__y
+  bl printf
+  ldmfd sp!, {r0-r3} // restore x_min, y_min, x_max, y_max
+
 for_x:
   cmp r0, r2 // if x_min > x_max
   bgt after_loop // finish loop

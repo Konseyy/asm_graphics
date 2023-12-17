@@ -268,6 +268,7 @@ circle:
   mov r4, r0 // r4 = x1
   mov r5, r1 // r5 = y1
   mov r6, r2 // r6 = radius
+
   mov r7, #0 // x offset
   mov r8, r6 // y offset
   mov r0, r6, LSL #1 // r0 = 2 * radius
@@ -275,21 +276,9 @@ circle:
 
   bl FrameBufferGetAddress // r0 = framebuffer base address
   mov r10, r0 // r10 = framebuffer base address
-  bl draw_circle
 
 circle_loop:
   cmp r7, r8 // if x_offset > y_offset
-
-  add r7, r7, #1
-  bl draw_circle
-  cmp r9, #0 // if d == 0
-  blgt d_positive
-  bl d_else
-
-  
-  b circle_loop
-
-draw_circle:
   bgt end // finish loop
   add r0, r4, r7 // x0 = x1 + x_offset
   add r1, r5, r8 // y0 = y1 + y_offset
@@ -323,19 +312,24 @@ draw_circle:
   sub r1, r4, r7 // y0 = x1 - x_offset
   mov r2, r10
   bl pixel // draw pixel
-  bx lr
-  
 
-d_positive:
-  sub r8, r8, #1
-  add r9, r9, #10
-  sub r0, r7, r8
-  add r9, r0, LSL #2
-  bx lr
-d_else:
+  cmp r9, #0 // if d == 0
+  blt d_less_than_zero
+  b d_else
+
+d_less_than_zero:
   add r9, r9, #6
   add r9, r9, r7, LSL #2
-  bx lr
+  b d_next
+d_else:
+  add r9, r9, #10
+  sub r0, r7, r8
+  add r9, r9, r0, LSL #2
+  sub r8, r8, #1
+
+d_next:
+  add r7, r7, #1
+  b circle_loop
 
 @ (x, y) returns x/y
 divide:

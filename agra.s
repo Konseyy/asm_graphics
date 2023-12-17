@@ -325,11 +325,11 @@ d_positive:
   sub r8, r8, #1
   add r9, r9, #10
   sub r0, r7, r8
-  add r9, r0, LSL, #2
+  add r9, r0, LSL #2
   bx lr
 d_else:
   add r9, r9, #6
-  add r9, r9, r7, LSL, #2
+  add r9, r9, r7, LSL #2
   bx lr
 
 @ (x, y) returns x/y

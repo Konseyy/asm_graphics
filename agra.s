@@ -278,6 +278,13 @@ circle:
 
 circle_loop:
   cmp r7, r8 // if x_offset > y_offset
+
+  add r7, r7, #1
+
+  cmp r9, #0 // if d == 0
+  blgt d_positive
+  bl d_else
+
   bgt end // finish loop
   add r0, r4, r7 // x0 = x1 + x_offset
   add r1, r5, r8 // y0 = y1 + y_offset
@@ -311,24 +318,19 @@ circle_loop:
   sub r1, r4, r7 // y0 = x1 - x_offset
   mov r2, r10
   bl pixel // draw pixel
-
-  cmp r9, #0 // if d == 0
-  blt d_less_than_zero
-  b d_else
-
-d_less_than_zero:
-  add r9, r9, #3
-  add r9, r9, r7, LSL #1
-  b d_next
-d_else:
-  add r9, r9, #5
-  sub r0, r7, r8
-  add r9, r9, r0, LSL #1
-  sub r8, r8, #1
-
-d_next:
-  add r7, r7, #1
   b circle_loop
+  
+
+d_positive:
+  sub r8, r8, #1
+  add r9, r9, #10
+  sub r0, r7, r8
+  add r9, r0, LSL, #2
+  bx lr
+d_else:
+  add r9, r9, #6
+  add r9, r9, r7, LSL, #2
+  bx lr
 
 @ (x, y) returns x/y
 divide:

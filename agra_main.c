@@ -24,8 +24,8 @@ int main()
   setPixColor(&(pixcolor_t){1, 1, 0, 0});
   triangleFill(10, 10, 20, 10, 15, 15);
 
-  setPixColor(&(pixcolor_t){0, 0, 1, 0});
-  circle(20, 10, 5);
+  // setPixColor(&(pixcolor_t){0, 0, 1, 0});
+  // circle(20, 10, 5);
 
   FrameShow();
   return 0;

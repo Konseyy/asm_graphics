@@ -120,27 +120,27 @@ triangleFill:
   mov r10, r0 // r10 = framebuffer base address
 
   mov r0, r4 // r0 lowest x value
-  cmp r4, r6 // if x1 > x2
+  cmp r0, r6 // if x1 > x2
   movgt r0, r6 // r0 = x2
   cmp r0, r8 // if x0 > x3
   movgt r0, r8 // r0 = x3
 
   mov r1, r5 // r1 lowest y value
-  cmp r5, r7 // if y1 < y2
+  cmp r1, r7 // if y1 < y2
   movgt r1, r7 // r1 = y2
   cmp r1, r9 // if y0 < y3
   movgt r1, r9 // r1 = y3
 
   mov r2, r4 // r2 highest x value
-  cmp r4, r6 // if x1 > x2
+  cmp r2, r6 // if x1 < x2
   movlt r2, r6 // r2 = x2
-  cmp r2, r8 // if x2 > x3
+  cmp r2, r8 // if x2 < x3
   movlt r2, r8 // r2 = x3
 
   mov r3, r5 // r3 highest y value
-  cmp r5, r7 // if y1 > y2
+  cmp r3, r7 // if y1 < y2
   movlt r3, r7 // r3 = y2
-  cmp r3, r9 // if y2 > y3
+  cmp r3, r9 // if y2 < y3
   movlt r3, r9 // r3 = y3
 
   mov r11, r1 // r11 = y_min

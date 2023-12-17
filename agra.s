@@ -162,7 +162,6 @@ triangleFill:
   ldr r0, f__y
   bl printf
   ldmfd sp!, {r0-r3} // restore x_min, y_min, x_max, y_max
-  b end
 
 for_x:
   cmp r0, r2 // if x_min > x_max
@@ -179,6 +178,7 @@ for_y:
   ldmfd sp!, {r0-r3}
   // cleanup
   add r1, r1, #1 // y0++
+  b end
   b for_y // next y
 
 after_loop:

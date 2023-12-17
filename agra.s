@@ -114,6 +114,16 @@ triangleFill:
   ldr r8, [sp, #0] // r8 = x3
   ldr r9, [sp, #4] // r9 = y3
 
+  ldr r0, f__i
+  mov r1, r5
+  bl printf
+  ldr r0, f__i
+  mov r1, r7
+  bl printf
+  ldr r0, f__i
+  mov r1, r9
+  bl printf
+
   stmfd sp!, {r4}
   bl FrameBufferGetAddress // r0 = framebuffer base address
   ldmfd sp!, {r4}
@@ -146,10 +156,10 @@ triangleFill:
   mov r11, r1 // r11 = y_min
 
   stmfd sp!, {r0-r3} // save x_min, y_min, x_max, y_max
-  mov r1, r11
+  mov r1, r0
   ldr r0, f__x
   bl printf
-  mov r1, r0
+  mov r1, r11
   ldr r0, f__y
   bl printf
   ldmfd sp!, {r0-r3} // restore x_min, y_min, x_max, y_max

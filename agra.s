@@ -172,6 +172,16 @@ for_y:
   addgt r0, r0, #1 // x0++
   bgt for_x // next x
   // loop body
+
+  stmfd sp!, {r0-r3} // save x_min, y_min, x_max, y_max
+  mov r1, r0
+  ldr r0, f__i
+  bl printf
+  mov r1, r1
+  ldr r0, f__i
+  bl printf
+  ldmfd sp!, {r0-r3} // restore x_min, y_min, x_max, y_max
+
   stmfd sp!, {r0-r3} // save x0, y0, x_max, y_max
   mov r2, r10 // r2 = framebuffer base address
   bl pixel // draw pixel

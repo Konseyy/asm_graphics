@@ -265,6 +265,7 @@ after_loop:
 // circle(int x1, int y1, int radius)
 circle:
   ldmfd sp!, {r4-r12, lr}
+  b end
   mov r4, r0 // r4 = x1
   mov r5, r1 // r5 = y1
   mov r6, r2 // r6 = radius
@@ -278,7 +279,6 @@ circle:
 circle_loop:
   cmp r7, r8 // if x_offset > y_offset
   bgt end // finish loop
-  b end
   add r0, r4, r7 // x0 = x1 + x_offset
   add r1, r5, r8 // y0 = y1 + y_offset
   mov r2, r10

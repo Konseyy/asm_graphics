@@ -115,13 +115,16 @@ triangleFill:
   ldr r9, [sp, #4] // r9 = y3
 
   ldr r0, f__i
-  mov r1, r5
+  ldr r1, [sp, #0]
   bl printf
   ldr r0, f__i
   mov r1, r7
   bl printf
   ldr r0, f__i
-  mov r1, r9
+  ldr r1, [sp, #4]
+  bl printf
+  ldr r0, f__i
+  ldr r1, [sp, #8]
   bl printf
 
   stmfd sp!, {r4}

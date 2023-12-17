@@ -11,7 +11,7 @@ int main()
   {
     for (int j = 0; j < frameHeight; j++)
     {
-      pixel(i, j, &(pixcolor_t){1, 1, 1, 0});
+      // pixel(i, j, &(pixcolor_t){1, 1, 1, 0});
     }
   }
 
@@ -19,11 +19,11 @@ int main()
   // pixel(1, 0, &(pixcolor_t){0, 1, 0, 0});
   // pixel(0, 1, &(pixcolor_t){0, 0, 1, 0});
 
-  setPixColor(&(pixcolor_t){1, 0, 1, 0});
-  line(19, 3, 0, 6);
+  // setPixColor(&(pixcolor_t){1, 0, 1, 0});
+  // line(19, 3, 0, 6);
 
   setPixColor(&(pixcolor_t){0, 1, 1, 0});
-  line(10, 0, 44, 22);
+  // line(10, 0, 44, 22);
 
   setPixColor(&(pixcolor_t){1, 1, 0, 0});
   triangleFill(10, 10, 20, 10, 15, 20);
